@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 import type { SiteContent } from "@/lib/content";
@@ -29,6 +30,7 @@ export async function POST(request: Request) {
 
   try {
     await saveContent(content);
+    revalidatePath("/", "layout");
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to save content.";
     return NextResponse.json({ error: message }, { status: 500 });
