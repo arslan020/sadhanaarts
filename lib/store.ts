@@ -3,9 +3,17 @@ import { DEFAULT_CONTENT, type SiteContent } from "@/lib/content";
 
 const CONTENT_KEY = "sadhana-arts:site-content";
 
+function readEnv(...keys: string[]): string | undefined {
+  for (const key of keys) {
+    const value = process.env[key]?.trim();
+    if (value) return value;
+  }
+  return undefined;
+}
+
 function getRedis(): Redis | null {
-  const url = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
+  const url = readEnv("KV_REST_API_URL", "UPSTASH_REDIS_REST_URL");
+  const token = readEnv("KV_REST_API_TOKEN", "UPSTASH_REDIS_REST_TOKEN");
   if (!url || !token) return null;
   return new Redis({ url, token });
 }
