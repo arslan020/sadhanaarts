@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please upload a JPG, PNG, WEBP, AVIF or GIF image." }, { status: 400 });
   }
   if (file.size > MAX_SIZE_BYTES) {
-    return NextResponse.json({ error: "Image is too large — please keep it under 5MB." }, { status: 400 });
+    return NextResponse.json({ error: "Image is too large. Please keep it under 5MB." }, { status: 400 });
   }
 
   if (!process.env.BLOB_READ_WRITE_TOKEN) {

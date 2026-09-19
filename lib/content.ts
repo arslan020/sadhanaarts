@@ -184,7 +184,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     lead: "Indian classical music, taught through lineage, presented at the highest level and carried forward for generations to come.",
     paragraphs: [
       "Sadhana Arts is a UK-based cultural organisation dedicated to preserving, developing and promoting Indian classical music.",
-      "Since 2003, our work has been rooted in education, live performance and the continuation of an extraordinary musical tradition. We bring together world-leading maestros, emerging artists, students and audiences — creating a bridge between heritage and the future.",
+      "Since 2003, our work has been rooted in education, live performance and the continuation of an extraordinary musical tradition. We bring together world-leading maestros, emerging artists, students and audiences, creating a bridge between heritage and the future.",
       "At the heart of everything we do is Parampara: the passing of knowledge, discipline, values and artistic tradition from Guru to student, and from one generation to the next.",
     ],
     closingHeading: "Learn. Experience. Perform. Preserve.",
@@ -213,7 +213,7 @@ export const DEFAULT_CONTENT: SiteContent = {
       {
         title: "Education & Community",
         description:
-          "Introducing tabla, rhythm, melody and Indian classical music to young people, schools and communities — supporting creativity, focus, confidence and cultural understanding.",
+          "Introducing tabla, rhythm, melody and Indian classical music to young people, schools and communities, supporting creativity, focus, confidence and cultural understanding.",
       },
       {
         title: "Workshops, Masterclasses & Shibirs",
@@ -246,7 +246,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     lead: "Indian classical music has traditionally been passed from Guru to student through close observation, repetition, discipline and time.",
     paragraphs: [
       "Our workshops, masterclasses and Shibirs create opportunities for students to experience that tradition directly.",
-      "Rather than replacing regular learning, these intensive programmes deepen it — allowing students to spend concentrated time studying repertoire, technique, interpretation, rhythm and the wider discipline of the art form.",
+      "Rather than replacing regular learning, these intensive programmes deepen it, allowing students to spend concentrated time studying repertoire, technique, interpretation, rhythm and the wider discipline of the art form.",
       "Sadhana Arts brings internationally respected artists and maestros into this learning environment, giving students access to knowledge that has itself been passed through generations.",
     ],
     shibirHeading: "The Sadhana Arts Shibir",
@@ -258,7 +258,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     beyondHeading: "Beyond the Shibir",
     beyondParagraphs: [
       "Learning does not end when the workshop finishes.",
-      "Our aim is to build an ongoing development pathway through masterclasses, follow-up learning, mentorship and performance opportunities — helping students turn inspiration into sustained development.",
+      "Our aim is to build an ongoing development pathway through masterclasses, follow-up learning, mentorship and performance opportunities, helping students turn inspiration into sustained development.",
     ],
     ctas: [
       { label: "View Upcoming Workshops", href: "/news" },
@@ -268,11 +268,11 @@ export const DEFAULT_CONTENT: SiteContent = {
   },
   masterclasses: {
     heading: "Masterclasses",
-    lead: "Intensive study with internationally respected maestros and teachers — complementary to regular learning, and rooted in Parampara.",
+    lead: "Intensive study with internationally respected maestros and teachers, complementary to regular learning, and rooted in Parampara.",
     paragraphs: [
       "Masterclasses give students concentrated time with artists who have dedicated their lives to Indian classical music.",
       "They are designed to deepen repertoire, technique, interpretation and rhythm, while also transmitting the discipline, judgement and values that cannot be learned from notation alone.",
-      "Whether you are an emerging musician or a dedicated student, a masterclass is an opportunity to learn at the source — and to carry that knowledge back into daily practice.",
+      "Whether you are an emerging musician or a dedicated student, a masterclass is an opportunity to learn at the source, and to carry that knowledge back into daily practice.",
     ],
   },
   education: {
@@ -281,16 +281,16 @@ export const DEFAULT_CONTENT: SiteContent = {
     paragraphs: [
       "Sadhana Arts supports creativity, focus, confidence and cultural understanding through education programmes for young people, schools and local communities.",
       "Learning rhythm develops counting, timing, pattern recognition and structured thinking. Dedicated practice develops memory, patience, concentration and confidence. Group learning teaches students to listen, respond and work towards a shared standard of excellence.",
-      "Our education work sits alongside workshops, Shibirs and performance — so that young people who discover the tradition have a pathway to continue.",
+      "Our education work sits alongside workshops, Shibirs and performance, so that young people who discover the tradition have a pathway to continue.",
     ],
   },
   parampara: {
-    heading: "Parampara — Keeping the Chain Alive",
+    heading: "Parampara: Keeping the Chain Alive",
     lead: "Parampara means the passing of knowledge from one generation to the next.",
     paragraphs: [
       "Within Indian classical music, that inheritance carries far more than compositions and technique. It carries interpretation, discipline, history, values and the individual wisdom of generations of great teachers.",
       "Our annual Parampara programme is an expression of that philosophy.",
-      "It brings together internationally respected masters of Indian classical music with emerging musicians and students — connecting those carrying the tradition today with those who will carry it tomorrow.",
+      "It brings together internationally respected masters of Indian classical music with emerging musicians and students, connecting those carrying the tradition today with those who will carry it tomorrow.",
       "Parampara is therefore more than a concert.",
       "It is continuity.",
       "It is an opportunity to hear extraordinary artistry while understanding the lineage, learning and human relationships that made that artistry possible. This philosophy is also central to the supporting letter, which describes Parampara as representing heritage, continuity and an opportunity for the next generation to encounter the tradition at its highest level.",
@@ -329,7 +329,7 @@ export const DEFAULT_CONTENT: SiteContent = {
       "Parampara returned in 2026, continuing Sadhana Arts' commitment to presenting Indian classical music at its highest level while connecting performance with lineage and learning.",
       "The 2026 platform featured internationally acclaimed bansuri maestro Pt. Rakesh Chaurasia alongside tabla maestro Pt. Yogesh Samsi.",
       "But Parampara is deliberately about more than internationally recognised names.",
-      "At the heart of the programme is the relationship between generations — masters, established musicians, emerging artists and students occupying the same artistic space.",
+      "At the heart of the programme is the relationship between generations, masters, established musicians, emerging artists and students occupying the same artistic space.",
       "It reflects what Sadhana Arts is ultimately trying to build: a living platform where excellence is experienced, knowledge is transmitted and the next generation is given something meaningful to aspire towards.",
     ],
     featured: [
@@ -376,7 +376,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     passingHeading: "Passing It Forward",
     passingParagraphs: [
       "The connection between these generations is fundamental to Sadhana Arts.",
-      "When emerging musicians can learn directly from masters — and eventually stand on stages alongside them — Parampara becomes something tangible rather than simply an idea.",
+      "When emerging musicians can learn directly from masters, and eventually stand on stages alongside them, Parampara becomes something tangible rather than simply an idea.",
     ],
     people: [
       {
@@ -419,11 +419,11 @@ export const DEFAULT_CONTENT: SiteContent = {
   news: {
     heading: "What’s New at Sadhana Arts",
     intro:
-      "Follow the latest from Sadhana Arts — from forthcoming concerts and artist announcements to Shibirs, workshops, education programmes and opportunities to get involved.",
+      "Follow the latest from Sadhana Arts, from forthcoming concerts and artist announcements to Shibirs, workshops, education programmes and opportunities to get involved.",
     categories: ["Events", "Workshops & Shibirs", "Artist News", "Education", "Parampara", "Community", "Announcements"],
     articles: [
       {
-        title: "Parampara 2026 — The Tradition Continues",
+        title: "Parampara 2026: The Tradition Continues",
         slug: "parampara-2026",
         date: "2026-01-15",
         category: "Parampara",
@@ -431,17 +431,17 @@ export const DEFAULT_CONTENT: SiteContent = {
           "Parampara returns with Pt. Rakesh Chaurasia and Pt. Yogesh Samsi, connecting world-class artistry with lineage and learning.",
         body: [
           "Parampara returned in 2026, continuing Sadhana Arts' commitment to presenting Indian classical music at its highest level while connecting performance with lineage and learning.",
-          "The 2026 platform featured internationally acclaimed bansuri maestro Pt. Rakesh Chaurasia alongside tabla maestro Pt. Yogesh Samsi — alongside emerging artists occupying the same artistic space.",
+          "The 2026 platform featured internationally acclaimed bansuri maestro Pt. Rakesh Chaurasia alongside tabla maestro Pt. Yogesh Samsi, alongside emerging artists occupying the same artistic space.",
         ],
         photoUrl: "",
       },
       {
-        title: "Parampara 2025 — A Tribute to Ustad Zakir Hussain",
+        title: "Parampara 2025: A Tribute to Ustad Zakir Hussain",
         slug: "parampara-2025",
         date: "2025-09-01",
         category: "Parampara",
         excerpt:
-          "Honouring the legacy of one of Indian classical music's most celebrated figures — and the students, musicians and traditions that carry it forward.",
+          "Honouring the legacy of one of Indian classical music's most celebrated figures, and the students, musicians and traditions that carry it forward.",
         body: [
           "In 2025, Sadhana Arts presented Parampara: A Tribute to Ustad Zakir Hussain, honouring the legacy of one of Indian classical music's most celebrated figures.",
           "The programme reflected the principle from which Parampara takes its name: that a musical legacy lives not only through memory, but through the students, musicians, compositions, traditions and relationships that carry it forward.",
@@ -474,7 +474,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     journeyHeading: "Become Part of the Journey",
     journeyParagraphs: [
       "We welcome support from individuals, families, philanthropists, businesses, trusts, foundations and cultural partners who share our belief in preserving and passing forward this tradition.",
-      "There are many ways to contribute — through donations, programme funding, patronage, partnerships, introductions or supporting specific educational and cultural initiatives.",
+      "There are many ways to contribute, through donations, programme funding, patronage, partnerships, introductions or supporting specific educational and cultural initiatives.",
       "Supporters can also develop a closer relationship with Sadhana Arts through selected events, programmes, artists and the communities their contribution helps us reach.",
     ],
     legacyHeading: "Above All, This Is About Legacy.",

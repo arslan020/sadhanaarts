@@ -67,7 +67,7 @@ export default function AdminDashboardPage() {
     });
     setSaving(false);
     if (res.ok) {
-      setStatus({ type: "ok", message: "Changes saved — the live site is updated." });
+      setStatus({ type: "ok", message: "Changes saved. The live site is updated." });
     } else {
       const data = await res.json().catch(() => null);
       setStatus({ type: "error", message: data?.error || "Failed to save changes." });

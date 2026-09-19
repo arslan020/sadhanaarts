@@ -79,7 +79,7 @@ export default function ContactForm({ email, categories }: { email: string; cate
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>
-      {status === "sent" && <p className="mt-3 text-sm text-burgundy">Thank you — we will be in touch shortly.</p>}
+      {status === "sent" && <p className="mt-3 text-sm text-burgundy">Thank you. We will be in touch shortly.</p>}
       {status === "error" && (
         <p className="mt-3 text-sm text-red-700">
           Something went wrong. Please email us directly at {email}.
