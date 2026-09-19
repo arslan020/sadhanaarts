@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/Logo";
 import {
@@ -38,6 +38,11 @@ export default function AdminDashboardPage() {
   const [status, setStatus] = useState<{ type: "ok" | "error"; message: string } | null>(null);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
   const [tab, setTab] = useState<TabId>("home");
+  const contentRef = useRef<SiteContent | null>(null);
+
+  useEffect(() => {
+    contentRef.current = content;
+  }, [content]);
 
   useEffect(() => {
     fetch("/api/admin/content")
@@ -56,22 +61,26 @@ export default function AdminDashboardPage() {
       .finally(() => setLoading(false));
   }, [router]);
 
-  async function handleSave() {
-    if (!content) return;
+  async function persist(payload: SiteContent, message: string) {
     setSaving(true);
     setStatus(null);
     const res = await fetch("/api/admin/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(content),
+      body: JSON.stringify(payload),
     });
     setSaving(false);
     if (res.ok) {
-      setStatus({ type: "ok", message: "Changes saved. The live site is updated." });
-    } else {
-      const data = await res.json().catch(() => null);
-      setStatus({ type: "error", message: data?.error || "Failed to save changes." });
+      setStatus({ type: "ok", message });
+      return;
     }
+    const data = await res.json().catch(() => null);
+    setStatus({ type: "error", message: data?.error || "Failed to save changes." });
+  }
+
+  async function handleSave() {
+    if (!contentRef.current) return;
+    await persist(contentRef.current, "Changes saved. The live site is updated.");
   }
 
   async function handleLogout() {
@@ -88,11 +97,17 @@ export default function AdminDashboardPage() {
     return data.url as string;
   }
 
-  async function handleUpload(key: string, file: File, apply: (url: string) => void) {
+  async function handleUpload(key: string, file: File, update: (prev: SiteContent, url: string) => SiteContent) {
     setUploadingKey(key);
     setStatus(null);
     try {
-      apply(await uploadImage(file));
+      const url = await uploadImage(file);
+      const prev = contentRef.current;
+      if (!prev) return;
+      const next = update(prev, url);
+      contentRef.current = next;
+      setContent(next);
+      await persist(next, "Photo uploaded and saved. The live site is updated.");
     } catch (err) {
       setStatus({ type: "error", message: err instanceof Error ? err.message : "Upload failed." });
     } finally {
@@ -204,9 +219,10 @@ export default function AdminDashboardPage() {
                     imageUrl={content.home.heroImage}
                     uploading={uploadingKey === "homeHero"}
                     onUpload={(file) =>
-                      handleUpload("homeHero", file, (url) =>
-                        setContent((prev) => (prev ? { ...prev, home: { ...prev.home, heroImage: url } } : prev))
-                      )
+                      handleUpload("homeHero", file, (prev, url) => ({
+                        ...prev,
+                        home: { ...prev.home, heroImage: url },
+                      }))
                     }
                     onClear={() => setContent({ ...content, home: { ...content.home, heroImage: "" } })}
                   />
@@ -296,9 +312,10 @@ export default function AdminDashboardPage() {
                 imageUrl={content.about.photoUrl}
                 uploading={uploadingKey === "aboutPhoto"}
                 onUpload={(file) =>
-                  handleUpload("aboutPhoto", file, (url) =>
-                    setContent((prev) => (prev ? { ...prev, about: { ...prev.about, photoUrl: url } } : prev))
-                  )
+                  handleUpload("aboutPhoto", file, (prev, url) => ({
+                    ...prev,
+                    about: { ...prev.about, photoUrl: url },
+                  }))
                 }
                 onClear={() => setContent({ ...content, about: { ...content.about, photoUrl: "" } })}
               />
@@ -426,9 +443,10 @@ export default function AdminDashboardPage() {
               onLead={(lead) => setContent({ ...content, workshops: { ...content.workshops, lead } })}
               onParagraphs={(paragraphs) => setContent({ ...content, workshops: { ...content.workshops, paragraphs } })}
               onPhoto={(file) =>
-                handleUpload("workshopsPhoto", file, (url) =>
-                  setContent((prev) => (prev ? { ...prev, workshops: { ...prev.workshops, photoUrl: url } } : prev))
-                )
+                handleUpload("workshopsPhoto", file, (prev, url) => ({
+                  ...prev,
+                  workshops: { ...prev.workshops, photoUrl: url },
+                }))
               }
               onClearPhoto={() => setContent({ ...content, workshops: { ...content.workshops, photoUrl: "" } })}
             />
@@ -550,9 +568,10 @@ export default function AdminDashboardPage() {
                 imageUrl={content.parampara.photoUrl}
                 uploading={uploadingKey === "paramparaPhoto"}
                 onUpload={(file) =>
-                  handleUpload("paramparaPhoto", file, (url) =>
-                    setContent((prev) => (prev ? { ...prev, parampara: { ...prev.parampara, photoUrl: url } } : prev))
-                  )
+                  handleUpload("paramparaPhoto", file, (prev, url) => ({
+                    ...prev,
+                    parampara: { ...prev.parampara, photoUrl: url },
+                  }))
                 }
                 onClear={() => setContent({ ...content, parampara: { ...content.parampara, photoUrl: "" } })}
               />
@@ -594,9 +613,10 @@ export default function AdminDashboardPage() {
                 imageUrl={content.parampara2025.photoUrl}
                 uploading={uploadingKey === "p2025"}
                 onUpload={(file) =>
-                  handleUpload("p2025", file, (url) =>
-                    setContent((prev) => (prev ? { ...prev, parampara2025: { ...prev.parampara2025, photoUrl: url } } : prev))
-                  )
+                  handleUpload("p2025", file, (prev, url) => ({
+                    ...prev,
+                    parampara2025: { ...prev.parampara2025, photoUrl: url },
+                  }))
                 }
                 onClear={() => setContent({ ...content, parampara2025: { ...content.parampara2025, photoUrl: "" } })}
               />
@@ -662,9 +682,10 @@ export default function AdminDashboardPage() {
                 imageUrl={content.parampara2026.photoUrl}
                 uploading={uploadingKey === "p2026"}
                 onUpload={(file) =>
-                  handleUpload("p2026", file, (url) =>
-                    setContent((prev) => (prev ? { ...prev, parampara2026: { ...prev.parampara2026, photoUrl: url } } : prev))
-                  )
+                  handleUpload("p2026", file, (prev, url) => ({
+                    ...prev,
+                    parampara2026: { ...prev.parampara2026, photoUrl: url },
+                  }))
                 }
                 onClear={() => setContent({ ...content, parampara2026: { ...content.parampara2026, photoUrl: "" } })}
               />
@@ -802,14 +823,11 @@ export default function AdminDashboardPage() {
                     setContent({ ...content, artists: { ...content.artists, people } });
                   }}
                   onUpload={(file) =>
-                    handleUpload(`artist-${i}`, file, (url) =>
-                      setContent((prev) => {
-                        if (!prev) return prev;
-                        const people = [...prev.artists.people];
-                        people[i] = { ...people[i], photoUrl: url };
-                        return { ...prev, artists: { ...prev.artists, people } };
-                      })
-                    )
+                    handleUpload(`artist-${i}`, file, (prev, url) => {
+                      const people = [...prev.artists.people];
+                      people[i] = { ...people[i], photoUrl: url };
+                      return { ...prev, artists: { ...prev.artists, people } };
+                    })
                   }
                   onRemove={() =>
                     setContent({
@@ -964,14 +982,11 @@ export default function AdminDashboardPage() {
                       imageUrl={article.photoUrl}
                       uploading={uploadingKey === `news-${i}`}
                       onUpload={(file) =>
-                        handleUpload(`news-${i}`, file, (url) =>
-                          setContent((prev) => {
-                            if (!prev) return prev;
-                            const articles = [...prev.news.articles];
-                            articles[i] = { ...articles[i], photoUrl: url };
-                            return { ...prev, news: { ...prev.news, articles } };
-                          })
-                        )
+                        handleUpload(`news-${i}`, file, (prev, url) => {
+                          const articles = [...prev.news.articles];
+                          articles[i] = { ...articles[i], photoUrl: url };
+                          return { ...prev, news: { ...prev.news, articles } };
+                        })
                       }
                       onClear={() => {
                         const articles = [...content.news.articles];

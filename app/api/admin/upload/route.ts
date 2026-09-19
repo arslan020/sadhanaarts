@@ -42,11 +42,11 @@ export async function POST(request: Request) {
 
   try {
     const blob = await put(pathname, file, { ...options, access: "public" });
-    return NextResponse.json({ url: blob.url });
+    return NextResponse.json({ url: blob.url || blob.downloadUrl });
   } catch {
     try {
       const blob = await put(pathname, file, { ...options, access: "private" });
-      return NextResponse.json({ url: blob.url });
+      return NextResponse.json({ url: blob.url || blob.downloadUrl });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Upload failed.";
       return NextResponse.json({ error: message }, { status: 500 });
