@@ -142,8 +142,8 @@ export default function AdminDashboardPage() {
       <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
         {!storageConfigured && (
           <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            Storage isn&apos;t connected yet, so changes can&apos;t be saved. Ask your developer to connect a KV/Redis
-            database to this project in the Vercel dashboard (Storage tab), then redeploy.
+            Storage isn&apos;t connected yet, so changes can&apos;t be saved. Connect a Neon database to this project
+            in the Vercel dashboard (Storage tab), then redeploy.
           </p>
         )}
 

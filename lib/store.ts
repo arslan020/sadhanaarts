@@ -1,7 +1,7 @@
-import { Redis } from "@upstash/redis";
+import { neon } from "@neondatabase/serverless";
 import { DEFAULT_CONTENT, type SiteContent } from "@/lib/content";
 
-const CONTENT_KEY = "sadhana-arts:site-content";
+const ROW_ID = "default";
 
 function readEnv(...keys: string[]): string | undefined {
   for (const key of keys) {
@@ -11,15 +11,37 @@ function readEnv(...keys: string[]): string | undefined {
   return undefined;
 }
 
-function getRedis(): Redis | null {
-  const url = readEnv("KV_REST_API_URL", "UPSTASH_REDIS_REST_URL");
-  const token = readEnv("KV_REST_API_TOKEN", "UPSTASH_REDIS_REST_TOKEN");
-  if (!url || !token) return null;
-  return new Redis({ url, token });
+function getDatabaseUrl(): string | undefined {
+  return readEnv(
+    "DATABASE_URL",
+    "POSTGRES_URL",
+    "POSTGRES_PRISMA_URL",
+    "NEON_DATABASE_URL",
+    "DATABASE_URL_UNPOOLED",
+    "POSTGRES_URL_NON_POOLING"
+  );
 }
 
+function getSql() {
+  const url = getDatabaseUrl();
+  if (!url) return null;
+  return neon(url);
+}
+
+type SqlClient = NonNullable<ReturnType<typeof getSql>>;
+
 export function isStorageConfigured(): boolean {
-  return getRedis() !== null;
+  return Boolean(getDatabaseUrl());
+}
+
+async function ensureTable(sql: SqlClient) {
+  await sql`
+    CREATE TABLE IF NOT EXISTS site_content (
+      id TEXT PRIMARY KEY,
+      data JSONB NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -47,19 +69,29 @@ function deepMerge<T>(base: T, overlay: unknown): T {
 }
 
 export async function getContent(): Promise<SiteContent> {
-  const redis = getRedis();
-  if (!redis) return DEFAULT_CONTENT;
-  const stored = await redis.get<SiteContent>(CONTENT_KEY);
+  const sql = getSql();
+  if (!sql) return DEFAULT_CONTENT;
+
+  await ensureTable(sql);
+  const rows = (await sql`SELECT data FROM site_content WHERE id = ${ROW_ID} LIMIT 1`) as { data: SiteContent }[];
+  const stored = rows[0]?.data;
   if (!stored) return DEFAULT_CONTENT;
   return deepMerge(DEFAULT_CONTENT, stored);
 }
 
 export async function saveContent(content: SiteContent): Promise<void> {
-  const redis = getRedis();
-  if (!redis) {
+  const sql = getSql();
+  if (!sql) {
     throw new Error(
-      "Storage is not configured yet. Connect a KV/Redis database to this project in the Vercel dashboard (Storage tab), then redeploy."
+      "Storage is not configured yet. Connect a Neon database to this project in the Vercel dashboard (Storage tab), then redeploy."
     );
   }
-  await redis.set(CONTENT_KEY, content);
+
+  await ensureTable(sql);
+  const payload = JSON.stringify(content);
+  await sql`
+    INSERT INTO site_content (id, data, updated_at)
+    VALUES (${ROW_ID}, ${payload}::jsonb, NOW())
+    ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()
+  `;
 }
