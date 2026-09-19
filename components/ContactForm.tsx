@@ -7,39 +7,43 @@ const fieldClass =
 
 export default function ContactForm({ email, categories }: { email: string; categories: string[] }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
-    if (data.get("_honey")) return;
+    if (data.get("honey")) return;
 
     setStatus("sending");
+    setErrorMessage("");
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${email}`, {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: data.get("name")?.toString() ?? "",
           email: data.get("email")?.toString() ?? "",
           category: data.get("category")?.toString() ?? "",
           message: data.get("message")?.toString() ?? "",
-          _subject: `Sadhana Arts enquiry: ${data.get("category")?.toString() ?? "General"}`,
-          _template: "table",
-          _captcha: "false",
+          honey: data.get("honey")?.toString() ?? "",
         }),
       });
-      if (!res.ok) throw new Error("Failed to send");
+      const payload = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(payload?.error || "Failed to send");
+      }
       setStatus("sent");
       form.reset();
-    } catch {
+    } catch (err) {
       setStatus("error");
+      setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="rounded-2xl bg-ivory p-6 shadow-sm ring-1 ring-parchment sm:p-8">
-      <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+      <input type="text" name="honey" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <div className="space-y-4">
         <div>
           <label htmlFor="name" className="text-sm font-medium text-ink">
@@ -82,7 +86,7 @@ export default function ContactForm({ email, categories }: { email: string; cate
       {status === "sent" && <p className="mt-3 text-sm text-burgundy">Thank you. We will be in touch shortly.</p>}
       {status === "error" && (
         <p className="mt-3 text-sm text-red-700">
-          Something went wrong. Please email us directly at {email}.
+          {errorMessage || "Something went wrong."} Please email us directly at {email}.
         </p>
       )}
     </form>
