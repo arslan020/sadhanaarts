@@ -6,9 +6,17 @@ import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"];
 
+function getBlobToken(): string | undefined {
+  return (
+    process.env.BLOB_READ_WRITE_TOKEN ||
+    process.env.Blob_READ_WRITE_TOKEN ||
+    process.env.blob_READ_WRITE_TOKEN
+  );
+}
+
 export async function POST(request: Request) {
-  const token = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
-  if (!verifySessionToken(token)) {
+  const session = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+  if (!verifySessionToken(session)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -25,7 +33,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Image is too large. Please keep it under 5MB." }, { status: 400 });
   }
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  const blobToken = getBlobToken();
+  if (!blobToken) {
     return NextResponse.json(
       {
         error:
@@ -35,10 +44,19 @@ export async function POST(request: Request) {
     );
   }
 
-  const blob = await put(file.name, file, {
-    access: "public",
-    addRandomSuffix: true,
-  });
+  const pathname = file.name || "upload";
+  const options = { addRandomSuffix: true, token: blobToken } as const;
 
-  return NextResponse.json({ url: blob.url });
+  try {
+    const blob = await put(pathname, file, { ...options, access: "public" });
+    return NextResponse.json({ url: blob.url });
+  } catch {
+    try {
+      const blob = await put(pathname, file, { ...options, access: "private" });
+      return NextResponse.json({ url: blob.url });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Upload failed.";
+      return NextResponse.json({ error: message }, { status: 500 });
+    }
+  }
 }
