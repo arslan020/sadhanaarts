@@ -23,6 +23,8 @@ export const metadata: Metadata = {
     "Sadhana Arts is a UK-based cultural organisation dedicated to preserving, developing and promoting Indian classical music through education, live performance and Parampara.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

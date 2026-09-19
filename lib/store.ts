@@ -1,5 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { unstable_noStore as noStore } from "next/cache";
+import { connection } from "next/server";
 import { DEFAULT_CONTENT, type SiteContent } from "@/lib/content";
 
 const ROW_ID = "default";
@@ -70,6 +71,7 @@ function deepMerge<T>(base: T, overlay: unknown): T {
 }
 
 export async function getContent(): Promise<SiteContent> {
+  await connection();
   noStore();
   const sql = getSql();
   if (!sql) return DEFAULT_CONTENT;
