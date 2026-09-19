@@ -1,11 +1,25 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import Reveal from "@/components/Reveal";
-import { NAV_LINKS, type SiteContent } from "@/lib/content";
+import type { SiteContent } from "@/lib/content";
+
+const EXPLORE_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Artists", href: "/artists" },
+  { label: "What’s New", href: "/news" },
+];
+
+const PROGRAMME_LINKS = [
+  { label: "Learn", href: "/learn" },
+  { label: "Parampara", href: "/parampara" },
+  { label: "Support Us", href: "/support" },
+  { label: "Contact", href: "/contact" },
+];
 
 function MailIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2}>
+    <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2}>
       <rect x="2" y="4" width="20" height="16" rx="2" />
       <path d="m2 7 8.97 6.65a2 2 0 0 0 2.06 0L22 7" />
     </svg>
@@ -14,7 +28,7 @@ function MailIcon() {
 
 function LocationIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2}>
+    <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2}>
       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
       <circle cx="12" cy="10" r="3" />
     </svg>
@@ -30,44 +44,36 @@ export default function Footer({ site, contact }: FooterProps) {
   return (
     <footer className="bg-deep-burgundy text-ivory">
       <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="grid gap-10 md:grid-cols-3">
-          <Reveal>
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <Reveal className="sm:col-span-2 lg:col-span-1">
             <Logo inverted />
-            <p className="mt-4 max-w-xs font-serif text-lg leading-snug text-soft-gold">{site.brandStatement}</p>
-            <p className="mt-3 text-sm leading-relaxed text-ivory/70">{site.tagline}</p>
+            <p className="mt-5 max-w-[16rem] font-serif text-lg leading-snug text-soft-gold">{site.brandStatement}</p>
           </Reveal>
 
-          <Reveal delayMs={100}>
-            <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-soft-gold">Explore</h4>
-            <ul className="mt-4 columns-2 space-y-2 text-sm">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href} className="break-inside-avoid">
-                  <Link href={link.href} className="text-ivory/85 transition hover:text-gold">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+          <FooterList heading="Explore" links={EXPLORE_LINKS} />
+          <FooterList heading="Programmes" links={PROGRAMME_LINKS} delayMs={80} />
 
-          <Reveal delayMs={200}>
+          <Reveal delayMs={160}>
             <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-soft-gold">Visit</h4>
-            <ul className="mt-4 space-y-3 text-sm text-ivory/85">
-              <li className="flex items-start gap-2">
+            <div className="mt-4 space-y-4 text-sm text-ivory/85">
+              <p className="flex items-start gap-2.5">
                 <LocationIcon />
-                <span>
-                  {contact.organisation}
-                  <br />
-                  {contact.addressLines.join(", ")}
+                <span className="leading-relaxed">
+                  <span className="block font-medium text-ivory">{contact.organisation}</span>
+                  {contact.addressLines.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
                 </span>
-              </li>
-              <li className="flex items-start gap-2">
+              </p>
+              <p className="flex items-start gap-2.5">
                 <MailIcon />
                 <a href={`mailto:${contact.email}`} className="hover:text-gold">
                   {contact.email}
                 </a>
-              </li>
-            </ul>
+              </p>
+            </div>
           </Reveal>
         </div>
 
@@ -78,5 +84,30 @@ export default function Footer({ site, contact }: FooterProps) {
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterList({
+  heading,
+  links,
+  delayMs = 0,
+}: {
+  heading: string;
+  links: { label: string; href: string }[];
+  delayMs?: number;
+}) {
+  return (
+    <Reveal delayMs={delayMs}>
+      <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-soft-gold">{heading}</h4>
+      <ul className="mt-4 space-y-2.5 text-sm">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link href={link.href} className="text-ivory/85 transition hover:text-gold">
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Reveal>
   );
 }
