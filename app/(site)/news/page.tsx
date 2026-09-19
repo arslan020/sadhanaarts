@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ContentImage from "@/components/ContentImage";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/store";
@@ -39,8 +40,7 @@ export default async function NewsPage() {
               <Reveal key={article.slug} delayMs={(i % 3) * 80}>
                 <article className="flex h-full flex-col overflow-hidden rounded-2xl bg-ivory shadow-sm ring-1 ring-parchment">
                   {article.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={article.photoUrl} alt="" className="aspect-[16/10] w-full object-cover" />
+                    <ContentImage src={article.photoUrl} className="aspect-[16/10] w-full object-cover" />
                   ) : (
                     <div className="flex aspect-[16/10] items-center justify-center bg-parchment text-burgundy/40">
                       <span className="text-xs uppercase tracking-wide">{article.category}</span>

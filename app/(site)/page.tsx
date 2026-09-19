@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ContentImage from "@/components/ContentImage";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
 import Reveal from "@/components/Reveal";
@@ -19,8 +20,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden bg-deep-burgundy">
         {home.heroImage ? (
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={home.heroImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
+            <ContentImage src={home.heroImage} className="absolute inset-0 h-full w-full object-cover opacity-35" />
             <div className="absolute inset-0 bg-gradient-to-b from-deep-burgundy/55 via-deep-burgundy/75 to-deep-burgundy" />
           </>
         ) : (

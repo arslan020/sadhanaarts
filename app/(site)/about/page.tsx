@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ContentImage from "@/components/ContentImage";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
 import PageHero from "@/components/PageHero";
@@ -20,8 +21,7 @@ export default async function AboutPage() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-[2fr_3fr]">
           <Reveal>
             {about.photoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={about.photoUrl} alt="" className="w-full rounded-2xl object-cover shadow-sm ring-1 ring-gold/30" />
+              <ContentImage src={about.photoUrl} className="w-full rounded-2xl object-cover shadow-sm ring-1 ring-gold/30" />
             ) : (
               <PhotoPlaceholder label="About photograph coming soon" />
             )}

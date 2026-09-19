@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ContentImage from "@/components/ContentImage";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
 import PageHero from "@/components/PageHero";
@@ -32,8 +33,7 @@ export default async function WorkshopsPage() {
           </div>
           <Reveal delayMs={150}>
             {workshops.photoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={workshops.photoUrl} alt="" className="w-full rounded-2xl object-cover ring-1 ring-gold/30" />
+              <ContentImage src={workshops.photoUrl} className="w-full rounded-2xl object-cover ring-1 ring-gold/30" />
             ) : (
               <PhotoPlaceholder label="Workshop photography coming soon" />
             )}

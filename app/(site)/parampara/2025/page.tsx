@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ContentImage from "@/components/ContentImage";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
 import PageHero from "@/components/PageHero";
@@ -47,8 +48,7 @@ export default async function Parampara2025Page() {
           </div>
           <Reveal>
             {parampara2025.photoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={parampara2025.photoUrl} alt="" className="w-full rounded-2xl object-cover ring-1 ring-gold/30" />
+              <ContentImage src={parampara2025.photoUrl} className="w-full rounded-2xl object-cover ring-1 ring-gold/30" />
             ) : (
               <PhotoPlaceholder label="Gallery photography coming soon" />
             )}

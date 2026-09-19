@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ContentImage from "@/components/ContentImage";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
 import PageHero from "@/components/PageHero";
@@ -81,8 +82,7 @@ function ArtistGroup({
             <Reveal key={person.name} delayMs={(i % 3) * 80}>
               <article className="h-full overflow-hidden rounded-2xl bg-warm-white shadow-sm ring-1 ring-parchment">
                 {person.photoUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={person.photoUrl} alt={person.name} className="aspect-[4/3] w-full object-cover" />
+                  <ContentImage src={person.photoUrl} alt={person.name} className="aspect-[4/3] w-full object-cover" />
                 ) : (
                   <div className="flex aspect-[4/3] items-center justify-center bg-parchment text-burgundy/40">
                     <span className="font-serif text-4xl">{person.name.slice(0, 1)}</span>

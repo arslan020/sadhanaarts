@@ -1,3 +1,4 @@
+import ContentImage from "@/components/ContentImage";
 import Ornament from "@/components/Ornament";
 import Reveal from "@/components/Reveal";
 
@@ -13,8 +14,7 @@ export default function PageHero({ eyebrow, title, lead, imageUrl }: PageHeroPro
     <section className="relative overflow-hidden bg-deep-burgundy">
       {imageUrl ? (
         <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30" />
+          <ContentImage src={imageUrl} className="absolute inset-0 h-full w-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-deep-burgundy/70 via-deep-burgundy/80 to-deep-burgundy" />
         </>
       ) : (

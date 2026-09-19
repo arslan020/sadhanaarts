@@ -2,17 +2,10 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
+import { getBlobToken } from "@/lib/blob";
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"];
-
-function getBlobToken(): string | undefined {
-  return (
-    process.env.BLOB_READ_WRITE_TOKEN ||
-    process.env.Blob_READ_WRITE_TOKEN ||
-    process.env.blob_READ_WRITE_TOKEN
-  );
-}
 
 export async function POST(request: Request) {
   const session = (await cookies()).get(SESSION_COOKIE_NAME)?.value;

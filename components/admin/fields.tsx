@@ -1,5 +1,7 @@
 "use client";
 
+import { mediaSrc } from "@/lib/blob";
+
 export const inputClass =
   "w-full rounded-lg border border-parchment px-3 py-2 text-sm text-ink outline-none transition-colors focus:border-gold";
 export const labelClass = "text-sm font-medium text-ink";
@@ -38,7 +40,7 @@ export function ImageUpload({
     <div className="flex items-center gap-3">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       {imageUrl ? (
-        <img src={imageUrl} alt="" className="h-16 w-16 flex-shrink-0 rounded-lg object-cover ring-1 ring-parchment" />
+        <img src={mediaSrc(imageUrl)} alt="" className="h-16 w-16 flex-shrink-0 rounded-lg object-cover ring-1 ring-parchment" />
       ) : (
         <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-parchment text-[10px] text-ink/40">
           No photo
