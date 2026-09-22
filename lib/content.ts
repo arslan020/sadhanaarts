@@ -49,6 +49,13 @@ export type Artist = {
   photoUrl: string;
 };
 
+export type TeamMember = {
+  name: string;
+  role: string;
+  bio: string;
+  photoUrl: string;
+};
+
 export type NewsArticle = {
   title: string;
   slug: string;
@@ -64,6 +71,7 @@ export type SiteContent = {
     name: string;
     brandStatement: string;
     tagline: string;
+    website: string;
   };
   home: {
     heading: string;
@@ -84,6 +92,9 @@ export type SiteContent = {
     whyHeading: string;
     whyParagraphs: string[];
     photoUrl: string;
+    teamHeading: string;
+    teamIntro: string;
+    teamMembers: TeamMember[];
   };
   workshops: {
     heading: string;
@@ -160,6 +171,12 @@ export type SiteContent = {
     legacyHeading: string;
     legacyItems: string[];
     ctas: Cta[];
+    payItForward: {
+      heading: string;
+      paragraphs: string[];
+      photoUrl: string;
+      cta: Cta;
+    };
   };
   contact: {
     heading: string;
@@ -167,6 +184,7 @@ export type SiteContent = {
     organisation: string;
     addressLines: string[];
     email: string;
+    emails: string[];
     enquiryCategories: string[];
     instagram: string;
     facebook: string;
@@ -178,6 +196,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     name: "Sadhana Arts",
     brandStatement: "Preserving a living tradition. Building a global platform.",
     tagline: "Indian classical music, taught through lineage, presented at the highest level and carried forward for generations to come.",
+    website: "https://sadhana-arts.org",
   },
   home: {
     heading: "Preserving a Living Tradition. Building a Global Platform.",
@@ -240,6 +259,22 @@ export const DEFAULT_CONTENT: SiteContent = {
       "This is the tradition Sadhana Arts exists to protect.",
     ],
     photoUrl: "",
+    teamHeading: "Meet the Team",
+    teamIntro: "The people who carry the work of Sadhana Arts, day to day and year to year.",
+    teamMembers: [
+      {
+        name: "Amritpal Sidhu",
+        role: "Team member",
+        bio: "A short biography will appear here. Add the photograph and text in the admin.",
+        photoUrl: "",
+      },
+      {
+        name: "Jaswinder Hanspal",
+        role: "Team member",
+        bio: "A short biography will appear here. Add the photograph and text in the admin.",
+        photoUrl: "",
+      },
+    ],
   },
   workshops: {
     heading: "Learning at the Source",
@@ -490,6 +525,15 @@ export const DEFAULT_CONTENT: SiteContent = {
       { label: "Become a Partner", href: "/contact" },
       { label: "Talk to Us", href: "/contact" },
     ],
+    payItForward: {
+      heading: "Pay it Forward",
+      paragraphs: [
+        "A living tradition continues because someone chooses to pass it on.",
+        "Pay it Forward is a way to give a student, a family or a community the chance to learn, experience and carry Indian classical music onward. Your gift can support workshops, Shibirs, education, artist development and the wider Sadhana Arts programme.",
+      ],
+      photoUrl: "",
+      cta: { label: "Donate", href: "/contact" },
+    },
   },
   contact: {
     heading: "Connect With Sadhana Arts",
@@ -497,7 +541,8 @@ export const DEFAULT_CONTENT: SiteContent = {
       "Whether you would like to attend an event, participate in a Shibir, work with us, support our programmes or simply learn more about Sadhana Arts, we would be delighted to hear from you.",
     organisation: "Sadhana Arts CIC",
     addressLines: ["78 High Street", "Newport Pagnell", "Milton Keynes", "MK16 8AQ", "United Kingdom"],
-    email: "info@sadhanaarts.com",
+    email: "Amritpal.Sidhu@Sadhana-Arts.org",
+    emails: ["Amritpal.Sidhu@Sadhana-Arts.org", "Jaswinder.Hanspal@Sadhana-Arts.org"],
     enquiryCategories: [
       "General Enquiries",
       "Workshops & Shibirs",
@@ -513,4 +558,15 @@ export const DEFAULT_CONTENT: SiteContent = {
 
 export function articleBySlug(content: SiteContent, slug: string): NewsArticle | undefined {
   return content.news.articles.find((article) => article.slug === slug);
+}
+
+export function contactEmails(contact: SiteContent["contact"]): string[] {
+  const listed = (contact.emails || []).map((value) => value.trim()).filter(Boolean);
+  if (listed.length) return [...new Set(listed)];
+  if (contact.email?.trim()) return [contact.email.trim()];
+  return ["Amritpal.Sidhu@Sadhana-Arts.org", "Jaswinder.Hanspal@Sadhana-Arts.org"];
+}
+
+export function displayWebsite(url: string): string {
+  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }

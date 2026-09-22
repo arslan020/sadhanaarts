@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import CtaRow from "@/components/CtaRow";
+import ContentImage from "@/components/ContentImage";
 import Ornament from "@/components/Ornament";
 import PageHero from "@/components/PageHero";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/store";
 
@@ -37,6 +39,43 @@ export default async function SupportPage() {
                 <p className="text-base leading-relaxed text-ink/80 sm:text-lg">{para}</p>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+      <section className="bg-warm-white">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-2">
+          <div>
+            {support.payItForward?.photoUrl ? (
+              <ContentImage
+                src={support.payItForward.photoUrl}
+                alt=""
+                className="w-full rounded-2xl object-cover shadow-sm ring-1 ring-gold/30"
+              />
+            ) : (
+              <PhotoPlaceholder label="Pay it Forward photograph coming soon" />
+            )}
+          </div>
+          <div>
+            <Reveal>
+              <h2 className="font-serif text-3xl font-semibold text-deep-burgundy sm:text-4xl">
+                {support.payItForward?.heading || "Pay it Forward"}
+              </h2>
+              <div className="mt-5">
+                <Ornament />
+              </div>
+            </Reveal>
+            <div className="mt-8 space-y-4">
+              {(support.payItForward?.paragraphs || []).map((para, i) => (
+                <Reveal key={i}>
+                  <p className="text-base leading-relaxed text-ink/80 sm:text-lg">{para}</p>
+                </Reveal>
+              ))}
+            </div>
+            {support.payItForward?.cta?.label && (
+              <Reveal className="mt-8">
+                <CtaRow ctas={[support.payItForward.cta]} />
+              </Reveal>
+            )}
           </div>
         </div>
       </section>

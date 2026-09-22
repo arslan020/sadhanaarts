@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { contactEmails } from "@/lib/content";
 import { getContent } from "@/lib/store";
 
 export const runtime = "nodejs";
@@ -13,6 +14,15 @@ function asString(value: unknown): string {
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function envRecipients(): string[] {
+  const raw = process.env.CONTACT_TO_EMAIL?.trim();
+  if (!raw) return [];
+  return raw
+    .split(",")
+    .map((value) => value.trim())
+    .filter(isValidEmail);
 }
 
 export async function POST(request: Request) {
@@ -41,7 +51,7 @@ export async function POST(request: Request) {
   }
 
   const content = await getContent();
-  const to = content.contact.email || "info@sadhanaarts.com";
+  const to = envRecipients().length ? envRecipients() : contactEmails(content.contact);
   const subject = `Sadhana Arts enquiry: ${category}`;
   const text = [
     `Name: ${name}`,
@@ -68,22 +78,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const formSubmit = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      name,
-      email,
-      category,
-      message,
-      _subject: subject,
-      _template: "table",
-      _captcha: "false",
-      _replyto: email,
-    }),
-  }).catch(() => null);
+  const results = await Promise.all(
+    to.map((address) =>
+      fetch(`https://formsubmit.co/ajax/${encodeURIComponent(address)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          category,
+          message,
+          _subject: subject,
+          _template: "table",
+          _captcha: "false",
+          _replyto: email,
+        }),
+      }).catch(() => null)
+    )
+  );
 
-  if (!formSubmit?.ok) {
+  if (!results.some((res) => res?.ok)) {
     return NextResponse.json(
       { error: "Email delivery is not connected yet. Please email us directly." },
       { status: 500 }

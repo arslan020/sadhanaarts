@@ -13,7 +13,7 @@ import {
   inputClass,
   labelClass,
 } from "@/components/admin/fields";
-import { DEFAULT_CONTENT, type Artist, type SiteContent } from "@/lib/content";
+import { DEFAULT_CONTENT, type Artist, type SiteContent, type TeamMember } from "@/lib/content";
 
 const TABS = [
   { id: "site", label: "Site" },
@@ -181,6 +181,14 @@ export default function AdminDashboardPage() {
               />
             </div>
             <div>
+              <label className={labelClass}>Website</label>
+              <input
+                className={`mt-1 ${inputClass}`}
+                value={content.site.website || ""}
+                onChange={(e) => setContent({ ...content, site: { ...content.site, website: e.target.value } })}
+              />
+            </div>
+            <div>
               <label className={labelClass}>Tagline</label>
               <textarea
                 rows={3}
@@ -213,7 +221,8 @@ export default function AdminDashboardPage() {
                 />
               </div>
               <div>
-                <label className={labelClass}>Hero photo</label>
+                <label className={labelClass}>Feature photograph</label>
+                <p className="mt-1 text-xs text-ink/60">Shown above the SADHANA ARTS title on the home page.</p>
                 <div className="mt-1">
                   <ImageUpload
                     imageUrl={content.home.heroImage}
@@ -399,6 +408,64 @@ export default function AdminDashboardPage() {
                 }
               >
                 + Add area
+              </button>
+            </Section>
+            <Section title="Meet the Team" description="Add photographs and biographies. You can add more people at any time.">
+              <Field
+                value={content.about.teamHeading || ""}
+                label="Heading"
+                onChange={(teamHeading) => setContent({ ...content, about: { ...content.about, teamHeading } })}
+              />
+              <Area
+                value={content.about.teamIntro || ""}
+                label="Introduction"
+                onChange={(teamIntro) => setContent({ ...content, about: { ...content.about, teamIntro } })}
+              />
+              {(content.about.teamMembers || []).map((member, i) => (
+                <TeamEditor
+                  key={i}
+                  member={member}
+                  uploading={uploadingKey === `team-${i}`}
+                  onChange={(next) => {
+                    const teamMembers = [...(content.about.teamMembers || [])];
+                    teamMembers[i] = next;
+                    setContent({ ...content, about: { ...content.about, teamMembers } });
+                  }}
+                  onUpload={(file) =>
+                    handleUpload(`team-${i}`, file, (prev, url) => {
+                      const teamMembers = [...(prev.about.teamMembers || [])];
+                      teamMembers[i] = { ...teamMembers[i], photoUrl: url };
+                      return { ...prev, about: { ...prev.about, teamMembers } };
+                    })
+                  }
+                  onRemove={() =>
+                    setContent({
+                      ...content,
+                      about: {
+                        ...content.about,
+                        teamMembers: (content.about.teamMembers || []).filter((_, idx) => idx !== i),
+                      },
+                    })
+                  }
+                />
+              ))}
+              <button
+                type="button"
+                className={addButtonClass}
+                onClick={() =>
+                  setContent({
+                    ...content,
+                    about: {
+                      ...content.about,
+                      teamMembers: [
+                        ...(content.about.teamMembers || []),
+                        { name: "", role: "", bio: "", photoUrl: "" },
+                      ],
+                    },
+                  })
+                }
+              >
+                + Add team member
               </button>
             </Section>
             <Section title="Why It Matters">
@@ -1038,6 +1105,7 @@ export default function AdminDashboardPage() {
         )}
 
         {tab === "support" && (
+          <>
           <Section title="Support Us">
             <Field value={content.support.heading} label="Heading" onChange={(heading) => setContent({ ...content, support: { ...content.support, heading } })} />
             <Area value={content.support.lead} label="Lead" onChange={(lead) => setContent({ ...content, support: { ...content.support, lead } })} />
@@ -1085,6 +1153,114 @@ export default function AdminDashboardPage() {
               }
             />
           </Section>
+          <Section title="Pay it Forward" description="Photograph, copy and donate button on the Support page.">
+            <Field
+              value={content.support.payItForward?.heading || ""}
+              label="Heading"
+              onChange={(heading) =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    payItForward: { ...content.support.payItForward, heading },
+                  },
+                })
+              }
+            />
+            <ImageUpload
+              imageUrl={content.support.payItForward?.photoUrl || ""}
+              uploading={uploadingKey === "payItForward"}
+              onUpload={(file) =>
+                handleUpload("payItForward", file, (prev, url) => ({
+                  ...prev,
+                  support: {
+                    ...prev.support,
+                    payItForward: { ...prev.support.payItForward, photoUrl: url },
+                  },
+                }))
+              }
+              onClear={() =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    payItForward: { ...content.support.payItForward, photoUrl: "" },
+                  },
+                })
+              }
+            />
+            <ParagraphList
+              values={content.support.payItForward?.paragraphs || []}
+              onChange={(paragraphs) =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    payItForward: { ...content.support.payItForward, paragraphs },
+                  },
+                })
+              }
+              onAdd={() =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    payItForward: {
+                      ...content.support.payItForward,
+                      paragraphs: [...(content.support.payItForward?.paragraphs || []), ""],
+                    },
+                  },
+                })
+              }
+              onRemove={(i) =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    payItForward: {
+                      ...content.support.payItForward,
+                      paragraphs: (content.support.payItForward?.paragraphs || []).filter((_, idx) => idx !== i),
+                    },
+                  },
+                })
+              }
+            />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Field
+                value={content.support.payItForward?.cta.label || ""}
+                label="Button label"
+                onChange={(label) =>
+                  setContent({
+                    ...content,
+                    support: {
+                      ...content.support,
+                      payItForward: {
+                        ...content.support.payItForward,
+                        cta: { ...content.support.payItForward.cta, label },
+                      },
+                    },
+                  })
+                }
+              />
+              <Field
+                value={content.support.payItForward?.cta.href || ""}
+                label="Button link (donate URL or /contact)"
+                onChange={(href) =>
+                  setContent({
+                    ...content,
+                    support: {
+                      ...content.support,
+                      payItForward: {
+                        ...content.support.payItForward,
+                        cta: { ...content.support.payItForward.cta, href },
+                      },
+                    },
+                  })
+                }
+              />
+            </div>
+          </Section>
+          </>
         )}
 
         {tab === "contact" && (
@@ -1092,7 +1268,48 @@ export default function AdminDashboardPage() {
             <Field value={content.contact.heading} label="Heading" onChange={(heading) => setContent({ ...content, contact: { ...content.contact, heading } })} />
             <Area value={content.contact.intro} label="Introduction" onChange={(intro) => setContent({ ...content, contact: { ...content.contact, intro } })} />
             <Field value={content.contact.organisation} label="Organisation" onChange={(organisation) => setContent({ ...content, contact: { ...content.contact, organisation } })} />
-            <Field value={content.contact.email} label="Email" onChange={(email) => setContent({ ...content, contact: { ...content.contact, email } })} />
+            <div>
+              <label className={labelClass}>Contact emails</label>
+              <p className="mt-1 text-xs text-ink/60">Form submissions are sent to every address listed here.</p>
+              <div className="mt-2 space-y-2">
+                {(content.contact.emails || [content.contact.email]).map((address, i) => (
+                  <div key={i} className="flex gap-2">
+                    <input
+                      className={inputClass}
+                      value={address}
+                      onChange={(e) => {
+                        const emails = [...(content.contact.emails || [content.contact.email])];
+                        emails[i] = e.target.value;
+                        setContent({
+                          ...content,
+                          contact: { ...content.contact, emails, email: emails[0] || "" },
+                        });
+                      }}
+                    />
+                    <RemoveButton
+                      label="Remove email"
+                      onClick={() => {
+                        const emails = (content.contact.emails || [content.contact.email]).filter((_, idx) => idx !== i);
+                        setContent({
+                          ...content,
+                          contact: { ...content.contact, emails, email: emails[0] || "" },
+                        });
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                className={`mt-3 ${addButtonClass}`}
+                onClick={() => {
+                  const emails = [...(content.contact.emails || [content.contact.email]), ""];
+                  setContent({ ...content, contact: { ...content.contact, emails, email: emails[0] || "" } });
+                }}
+              >
+                + Add email
+              </button>
+            </div>
             <div>
               <label className={labelClass}>Address lines</label>
               <div className="mt-1 space-y-2">
@@ -1264,6 +1481,50 @@ function LearnSection({
         onRemove={(i) => onParagraphs(paragraphs.filter((_, idx) => idx !== i))}
       />
     </Section>
+  );
+}
+
+function TeamEditor({
+  member,
+  uploading,
+  onChange,
+  onUpload,
+  onRemove,
+}: {
+  member: TeamMember;
+  uploading: boolean;
+  onChange: (member: TeamMember) => void;
+  onUpload: (file: File) => void;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="rounded-xl border border-parchment p-4">
+      <div className="flex items-start justify-between gap-2">
+        <div className="grid w-full gap-3 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>Name</label>
+            <input className={`mt-1 ${inputClass}`} value={member.name} onChange={(e) => onChange({ ...member, name: e.target.value })} />
+          </div>
+          <div>
+            <label className={labelClass}>Role</label>
+            <input className={`mt-1 ${inputClass}`} value={member.role} onChange={(e) => onChange({ ...member, role: e.target.value })} />
+          </div>
+        </div>
+        <RemoveButton label="Remove team member" onClick={onRemove} />
+      </div>
+      <div className="mt-3">
+        <ImageUpload
+          imageUrl={member.photoUrl}
+          uploading={uploading}
+          onUpload={onUpload}
+          onClear={() => onChange({ ...member, photoUrl: "" })}
+        />
+      </div>
+      <div className="mt-3">
+        <label className={labelClass}>Biography</label>
+        <textarea rows={3} className={`mt-1 ${inputClass}`} value={member.bio} onChange={(e) => onChange({ ...member, bio: e.target.value })} />
+      </div>
+    </div>
   );
 }
 

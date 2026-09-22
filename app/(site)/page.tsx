@@ -3,6 +3,7 @@ import Link from "next/link";
 import ContentImage from "@/components/ContentImage";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/store";
 
@@ -18,31 +19,40 @@ export default async function HomePage() {
   return (
     <main>
       <section className="relative overflow-hidden bg-deep-burgundy">
-        {home.heroImage ? (
-          <>
-            <ContentImage src={home.heroImage} className="absolute inset-0 h-full w-full object-cover opacity-35" />
-            <div className="absolute inset-0 bg-gradient-to-b from-deep-burgundy/55 via-deep-burgundy/75 to-deep-burgundy" />
-          </>
-        ) : (
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 15% 20%, rgba(201,162,39,0.28), transparent 42%), radial-gradient(circle at 85% 80%, rgba(107,33,52,0.4), transparent 50%)",
-            }}
-          />
-        )}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 15% 20%, rgba(201,162,39,0.28), transparent 42%), radial-gradient(circle at 85% 80%, rgba(107,33,52,0.4), transparent 50%)",
+          }}
+        />
 
-        <div className="relative z-10 mx-auto flex min-h-[calc(100vh-76px)] max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
-          <Reveal>
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-soft-gold">{site.name}</p>
-            <h1 className="mt-5 font-serif text-4xl font-semibold leading-tight text-ivory sm:text-6xl">
-              {home.heading}
-            </h1>
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-6 py-16 text-center sm:py-24">
+          <Reveal className="flex w-full flex-col items-center">
+            <div className="w-full max-w-3xl">
+              {home.heroImage ? (
+                <ContentImage
+                  src={home.heroImage}
+                  alt=""
+                  className="aspect-[16/9] w-full rounded-2xl object-cover shadow-lg ring-1 ring-gold/40"
+                />
+              ) : (
+                <PhotoPlaceholder
+                  label="Feature photograph coming soon"
+                  className="aspect-[16/9] bg-ivory/10 text-ivory/70 ring-ivory/20"
+                />
+              )}
+            </div>
+            <p className="mt-10 font-serif text-5xl font-semibold uppercase leading-none tracking-[0.08em] text-ivory sm:text-7xl lg:text-8xl">
+              {site.name}
+            </p>
             <div className="mt-7 flex justify-center">
               <Ornament />
             </div>
-            <p className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-ivory/85 sm:text-xl">{home.lead}</p>
+            <h1 className="mt-7 max-w-3xl font-serif text-2xl font-semibold leading-tight text-soft-gold sm:text-4xl">
+              {home.heading}
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-ivory/85 sm:text-xl">{home.lead}</p>
           </Reveal>
         </div>
       </section>

@@ -15,12 +15,14 @@ const sourceSans = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sadhana-arts.org"),
   title: {
     default: "Sadhana Arts | Preserving a Living Tradition",
     template: "%s | Sadhana Arts",
   },
   description:
     "Sadhana Arts is a UK-based cultural organisation dedicated to preserving, developing and promoting Indian classical music through education, live performance and Parampara.",
+  alternates: { canonical: "/" },
 };
 
 export const dynamic = "force-dynamic";

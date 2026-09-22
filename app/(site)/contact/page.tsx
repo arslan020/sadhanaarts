@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
+import { contactEmails, displayWebsite } from "@/lib/content";
 import { getContent } from "@/lib/store";
 
 export const revalidate = 0;
 export const metadata: Metadata = { title: "Contact" };
 
 export default async function ContactPage() {
-  const { contact } = await getContent();
+  const { contact, site } = await getContent();
+  const emails = contactEmails(contact);
+  const website = site.website || "https://sadhana-arts.org";
 
   return (
     <main>
@@ -25,8 +28,24 @@ export default async function ContactPage() {
                 </span>
               ))}
             </address>
-            <a href={`mailto:${contact.email}`} className="mt-5 inline-block font-medium text-burgundy hover:text-deep-burgundy">
-              {contact.email}
+            <div className="mt-5 space-y-2">
+              {emails.map((address) => (
+                <a
+                  key={address}
+                  href={`mailto:${address}`}
+                  className="block font-medium text-burgundy hover:text-deep-burgundy"
+                >
+                  {address}
+                </a>
+              ))}
+            </div>
+            <a
+              href={website}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 inline-block text-sm font-medium text-ink/70 hover:text-burgundy"
+            >
+              {displayWebsite(website)}
             </a>
             <div className="mt-8">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Enquiry categories</p>
@@ -43,7 +62,7 @@ export default async function ContactPage() {
             </div>
           </Reveal>
           <Reveal delayMs={120}>
-            <ContactForm email={contact.email} categories={contact.enquiryCategories} />
+            <ContactForm email={emails[0] || contact.email} categories={contact.enquiryCategories} />
           </Reveal>
         </div>
       </section>

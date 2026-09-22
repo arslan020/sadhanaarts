@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import Reveal from "@/components/Reveal";
-import type { SiteContent } from "@/lib/content";
+import { contactEmails, displayWebsite, type SiteContent } from "@/lib/content";
 
 const EXPLORE_LINKS = [
   { label: "Home", href: "/" },
@@ -69,10 +69,21 @@ export default function Footer({ site, contact }: FooterProps) {
               </p>
               <p className="flex items-start gap-2.5">
                 <MailIcon />
-                <a href={`mailto:${contact.email}`} className="hover:text-gold">
-                  {contact.email}
-                </a>
+                <span className="space-y-1">
+                  {contactEmails(contact).map((address) => (
+                    <a key={address} href={`mailto:${address}`} className="block hover:text-gold">
+                      {address}
+                    </a>
+                  ))}
+                </span>
               </p>
+              {site.website && (
+                <p>
+                  <a href={site.website} target="_blank" rel="noreferrer" className="hover:text-gold">
+                    {displayWebsite(site.website)}
+                  </a>
+                </p>
+              )}
             </div>
           </Reveal>
         </div>
