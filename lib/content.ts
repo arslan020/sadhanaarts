@@ -532,7 +532,7 @@ export const DEFAULT_CONTENT: SiteContent = {
         "Pay it Forward is a way to give a student, a family or a community the chance to learn, experience and carry Indian classical music onward. Your gift can support workshops, Shibirs, education, artist development and the wider Sadhana Arts programme.",
       ],
       photoUrl: "",
-      cta: { label: "Donate", href: "/contact" },
+      cta: { label: "Donate", href: "/contact?type=Donate" },
     },
   },
   contact: {
@@ -545,6 +545,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     emails: ["Amritpal.Sidhu@Sadhana-Arts.org", "Jaswinder.Hanspal@Sadhana-Arts.org"],
     enquiryCategories: [
       "General Enquiries",
+      "Donate",
       "Workshops & Shibirs",
       "Artist & Performance Enquiries",
       "Partnerships & Funding",
@@ -558,6 +559,14 @@ export const DEFAULT_CONTENT: SiteContent = {
 
 export function articleBySlug(content: SiteContent, slug: string): NewsArticle | undefined {
   return content.news.articles.find((article) => article.slug === slug);
+}
+
+export function enquiryCategories(contact: SiteContent["contact"]): string[] {
+  const list = [...(contact.enquiryCategories || [])].map((value) => value.trim()).filter(Boolean);
+  if (!list.some((category) => category.toLowerCase() === "donate")) {
+    list.splice(Math.min(1, list.length), 0, "Donate");
+  }
+  return list;
 }
 
 export function contactEmails(contact: SiteContent["contact"]): string[] {

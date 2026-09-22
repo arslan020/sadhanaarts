@@ -5,7 +5,15 @@ import { useState } from "react";
 const fieldClass =
   "mt-1 w-full rounded-lg border border-parchment bg-warm-white px-3 py-2.5 text-sm text-ink outline-none transition focus:border-gold";
 
-export default function ContactForm({ email, categories }: { email: string; categories: string[] }) {
+export default function ContactForm({
+  email,
+  categories,
+  defaultCategory,
+}: {
+  email: string;
+  categories: string[];
+  defaultCategory?: string;
+}) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -61,7 +69,7 @@ export default function ContactForm({ email, categories }: { email: string; cate
           <label htmlFor="category" className="text-sm font-medium text-ink">
             Enquiry type
           </label>
-          <select id="category" name="category" className={fieldClass} defaultValue={categories[0] ?? ""}>
+          <select id="category" name="category" className={fieldClass} defaultValue={defaultCategory || categories[0] || ""}>
             {categories.map((category) => (
               <option key={category} value={category}>
                 {category}

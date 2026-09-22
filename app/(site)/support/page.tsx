@@ -73,7 +73,17 @@ export default async function SupportPage() {
             </div>
             {support.payItForward?.cta?.label && (
               <Reveal className="mt-8">
-                <CtaRow ctas={[support.payItForward.cta]} />
+                <CtaRow
+                  ctas={[
+                    {
+                      ...support.payItForward.cta,
+                      href:
+                        support.payItForward.cta.href === "/contact"
+                          ? "/contact?type=Donate"
+                          : support.payItForward.cta.href,
+                    },
+                  ]}
+                />
               </Reveal>
             )}
           </div>
