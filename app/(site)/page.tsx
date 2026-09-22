@@ -30,7 +30,7 @@ export default async function HomePage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center sm:py-28">
+        <div className="relative z-10 mx-auto flex min-h-[52vh] max-w-4xl flex-col items-center justify-center px-6 py-16 text-center sm:min-h-[58vh] sm:py-20">
           <Reveal>
             <p className="font-serif text-5xl font-semibold uppercase leading-[0.95] tracking-[0.08em] text-ivory sm:text-7xl lg:text-8xl">
               {site.name}
@@ -46,20 +46,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="bg-warm-white">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
-          <Reveal>
-            {featureImage ? (
-              <ContentImage
-                src={featureImage}
-                alt="Parampara 2026"
-                className="w-full rounded-2xl object-cover shadow-sm ring-1 ring-parchment"
-              />
-            ) : (
-              <PhotoPlaceholder label="Feature photograph coming soon" />
-            )}
-          </Reveal>
-        </div>
+      <section className="relative w-full overflow-hidden bg-deep-burgundy">
+        {featureImage ? (
+          <>
+            <ContentImage
+              src={featureImage}
+              alt="Parampara 2026"
+              className="h-[40vh] w-full object-cover object-[center_35%] sm:h-[52vh] lg:h-[62vh]"
+            />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-deep-burgundy/70 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent" />
+          </>
+        ) : (
+          <div className="px-6 py-16">
+            <PhotoPlaceholder label="Feature photograph coming soon" />
+          </div>
+        )}
       </section>
 
       <section className="bg-warm-white">
