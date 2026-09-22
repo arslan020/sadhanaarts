@@ -1,53 +1,20 @@
-"use client";
+import ContentImage from "@/components/ContentImage";
 
-import { useEffect, useRef } from "react";
-import { mediaSrc } from "@/lib/blob";
-
-export default function HomeBanner({ src, alt }: { src: string; alt: string }) {
-  const trackRef = useRef<HTMLElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    const img = imgRef.current;
-    if (!track || !img) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let frame = 0;
-    const update = () => {
-      const rect = track.getBoundingClientRect();
-      const total = rect.height - window.innerHeight;
-      if (total <= 0) return;
-      const progress = Math.min(1, Math.max(0, -rect.top / total));
-      const shift = (progress - 0.5) * 48;
-      img.style.transform = `translate3d(0, ${shift}px, 0) scale(1.12)`;
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
+export default function HomeBanner({
+  src,
+  alt,
+  children,
+}: {
+  src: string;
+  alt: string;
+  children: React.ReactNode;
+}) {
   return (
-    <section ref={trackRef} className="relative h-[170vh] bg-deep-burgundy">
-      <div className="sticky top-[5.75rem] h-[calc(100svh-5.75rem)] overflow-hidden sm:top-[6.5rem] sm:h-[calc(100svh-6.5rem)]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          ref={imgRef}
-          src={mediaSrc(src)}
-          alt={alt}
-          className="h-full w-full object-cover object-center will-change-transform"
-        />
+    <section className="relative min-h-[70vh] w-full overflow-hidden bg-deep-burgundy sm:min-h-[82vh]">
+      <ContentImage src={src} alt={alt} className="absolute inset-0 h-full w-full object-cover object-center" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/20" />
+      <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-3xl items-end px-6 py-16 sm:min-h-[82vh] sm:py-24">
+        {children}
       </div>
     </section>
   );

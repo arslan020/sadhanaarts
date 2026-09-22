@@ -3,7 +3,6 @@ import Link from "next/link";
 import HomeBanner from "@/components/HomeBanner";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
-import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import Reveal from "@/components/Reveal";
 import { getContent } from "@/lib/store";
 
@@ -47,24 +46,26 @@ export default async function HomePage() {
       </section>
 
       {featureImage ? (
-        <HomeBanner src={featureImage} alt="Parampara 2026" />
-      ) : (
-        <section className="bg-warm-white px-6 py-16">
-          <PhotoPlaceholder label="Feature photograph coming soon" />
-        </section>
-      )}
-
-      <section className="bg-warm-white">
-        <div className="mx-auto max-w-3xl px-6 pb-20">
-          <div className="space-y-5">
+        <HomeBanner src={featureImage} alt="Parampara 2026">
+          <div className="space-y-5 text-ivory">
             {home.paragraphs.map((para, i) => (
-              <Reveal key={i} delayMs={i * 80}>
-                <p className="text-base leading-relaxed text-ink/80 sm:text-lg">{para}</p>
-              </Reveal>
+              <p key={i} className="text-base leading-relaxed text-ivory/90 sm:text-lg">
+                {para}
+              </p>
             ))}
           </div>
-        </div>
-      </section>
+        </HomeBanner>
+      ) : (
+        <section className="bg-warm-white">
+          <div className="mx-auto max-w-3xl space-y-5 px-6 py-20">
+            {home.paragraphs.map((para, i) => (
+              <p key={i} className="text-base leading-relaxed text-ink/80 sm:text-lg">
+                {para}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="bg-ivory">
         <div className="mx-auto max-w-3xl px-6 py-20 text-center">
