@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import ContentImage from "@/components/ContentImage";
+import HomeBanner from "@/components/HomeBanner";
 import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
@@ -46,19 +46,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="relative w-full overflow-hidden bg-black">
-        {featureImage ? (
-          <ContentImage
-            src={featureImage}
-            alt="Parampara 2026"
-            className="h-[min(70vh,720px)] w-full object-cover object-[center_30%]"
-          />
-        ) : (
-          <div className="px-6 py-16">
-            <PhotoPlaceholder label="Feature photograph coming soon" />
-          </div>
-        )}
-      </section>
+      {featureImage ? (
+        <HomeBanner src={featureImage} alt="Parampara 2026" />
+      ) : (
+        <section className="bg-warm-white px-6 py-16">
+          <PhotoPlaceholder label="Feature photograph coming soon" />
+        </section>
+      )}
 
       <section className="bg-warm-white">
         <div className="mx-auto max-w-3xl px-6 pb-20">
