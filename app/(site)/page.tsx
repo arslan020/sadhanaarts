@@ -13,8 +13,11 @@ export const metadata: Metadata = {
   title: "Home",
 };
 
+const DEFAULT_FEATURE_IMAGE = "/images/home-feature.jpg";
+
 export default async function HomePage() {
   const { home, site } = await getContent();
+  const featureImage = home.heroImage || DEFAULT_FEATURE_IMAGE;
 
   return (
     <main>
@@ -27,23 +30,9 @@ export default async function HomePage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-6 py-16 text-center sm:py-24">
-          <Reveal className="flex w-full flex-col items-center">
-            <div className="w-full max-w-3xl">
-              {home.heroImage ? (
-                <ContentImage
-                  src={home.heroImage}
-                  alt=""
-                  className="aspect-[16/9] w-full rounded-2xl object-cover shadow-lg ring-1 ring-gold/40"
-                />
-              ) : (
-                <PhotoPlaceholder
-                  label="Feature photograph coming soon"
-                  className="aspect-[16/9] bg-ivory/10 text-ivory/70 ring-ivory/20"
-                />
-              )}
-            </div>
-            <p className="mt-10 font-serif text-5xl font-semibold uppercase leading-none tracking-[0.08em] text-ivory sm:text-7xl lg:text-8xl">
+        <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-center px-6 py-20 text-center sm:py-28">
+          <Reveal>
+            <p className="font-serif text-5xl font-semibold uppercase leading-[0.95] tracking-[0.08em] text-ivory sm:text-7xl lg:text-8xl">
               {site.name}
             </p>
             <div className="mt-7 flex justify-center">
@@ -58,7 +47,23 @@ export default async function HomePage() {
       </section>
 
       <section className="bg-warm-white">
-        <div className="mx-auto max-w-3xl px-6 py-20">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+          <Reveal>
+            {featureImage ? (
+              <ContentImage
+                src={featureImage}
+                alt="Parampara 2026"
+                className="w-full rounded-2xl object-cover shadow-sm ring-1 ring-parchment"
+              />
+            ) : (
+              <PhotoPlaceholder label="Feature photograph coming soon" />
+            )}
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-warm-white">
+        <div className="mx-auto max-w-3xl px-6 pb-20">
           <div className="space-y-5">
             {home.paragraphs.map((para, i) => (
               <Reveal key={i} delayMs={i * 80}>

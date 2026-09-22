@@ -222,7 +222,7 @@ export default function AdminDashboardPage() {
               </div>
               <div>
                 <label className={labelClass}>Feature photograph</label>
-                <p className="mt-1 text-xs text-ink/60">Shown above the SADHANA ARTS title on the home page.</p>
+                <p className="mt-1 text-xs text-ink/60">Shown under the maroon hero panel on the home page.</p>
                 <div className="mt-1">
                   <ImageUpload
                     imageUrl={content.home.heroImage}

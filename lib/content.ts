@@ -217,7 +217,7 @@ export const DEFAULT_CONTENT: SiteContent = {
       { label: "Explore Parampara", href: "/parampara" },
       { label: "Support Our Work", href: "/support" },
     ],
-    heroImage: "",
+    heroImage: "/images/home-feature.jpg",
   },
   about: {
     heading: "Keeping Indian Classical Music Alive, and Thriving",
