@@ -19,8 +19,8 @@ export default function HomeBanner({ src, alt }: { src: string; alt: string }) {
       const total = rect.height - window.innerHeight;
       if (total <= 0) return;
       const progress = Math.min(1, Math.max(0, -rect.top / total));
-      const shift = (progress - 0.5) * 36;
-      img.style.transform = `translate3d(0, ${shift}px, 0) scale(1.03)`;
+      const shift = (progress - 0.5) * 48;
+      img.style.transform = `translate3d(0, ${shift}px, 0) scale(1.12)`;
     };
 
     const onScroll = () => {
@@ -39,14 +39,14 @@ export default function HomeBanner({ src, alt }: { src: string; alt: string }) {
   }, []);
 
   return (
-    <section ref={trackRef} className="relative h-[170vh] bg-black">
-      <div className="sticky top-[5.75rem] flex h-[calc(100svh-5.75rem)] items-center justify-center overflow-hidden bg-black sm:top-[6.5rem] sm:h-[calc(100svh-6.5rem)]">
+    <section ref={trackRef} className="relative h-[170vh] bg-deep-burgundy">
+      <div className="sticky top-[5.75rem] h-[calc(100svh-5.75rem)] overflow-hidden sm:top-[6.5rem] sm:h-[calc(100svh-6.5rem)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imgRef}
           src={mediaSrc(src)}
           alt={alt}
-          className="max-h-full w-full object-contain will-change-transform"
+          className="h-full w-full object-cover object-center will-change-transform"
         />
       </div>
     </section>
