@@ -1153,7 +1153,7 @@ export default function AdminDashboardPage() {
               }
             />
           </Section>
-          <Section title="Pay it Forward" description="Photograph, copy and donate button on the Support page.">
+          <Section title="Pay it Forward" description="Video, photographs, copy and donate button on the Support page.">
             <Field
               value={content.support.payItForward?.heading || ""}
               label="Heading"
@@ -1167,28 +1167,101 @@ export default function AdminDashboardPage() {
                 })
               }
             />
-            <ImageUpload
-              imageUrl={content.support.payItForward?.photoUrl || ""}
-              uploading={uploadingKey === "payItForward"}
-              onUpload={(file) =>
-                handleUpload("payItForward", file, (prev, url) => ({
-                  ...prev,
-                  support: {
-                    ...prev.support,
-                    payItForward: { ...prev.support.payItForward, photoUrl: url },
-                  },
-                }))
-              }
-              onClear={() =>
+            <Field
+              value={content.support.payItForward?.videoUrl || ""}
+              label="Video URL (YouTube, Vimeo or MP4). Leave blank for the coming-soon placeholder."
+              onChange={(videoUrl) =>
                 setContent({
                   ...content,
                   support: {
                     ...content.support,
-                    payItForward: { ...content.support.payItForward, photoUrl: "" },
+                    payItForward: { ...content.support.payItForward, videoUrl },
                   },
                 })
               }
             />
+            <div>
+              <p className={labelClass}>Main photograph</p>
+              <div className="mt-1">
+                <ImageUpload
+                  imageUrl={content.support.payItForward?.photoUrl || ""}
+                  uploading={uploadingKey === "payItForward"}
+                  onUpload={(file) =>
+                    handleUpload("payItForward", file, (prev, url) => ({
+                      ...prev,
+                      support: {
+                        ...prev.support,
+                        payItForward: { ...prev.support.payItForward, photoUrl: url },
+                      },
+                    }))
+                  }
+                  onClear={() =>
+                    setContent({
+                      ...content,
+                      support: {
+                        ...content.support,
+                        payItForward: { ...content.support.payItForward, photoUrl: "" },
+                      },
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div>
+              <p className={labelClass}>Additional photographs</p>
+              <div className="mt-2 space-y-3">
+                {(content.support.payItForward?.photoUrls || []).map((imageUrl, i) => (
+                  <div key={`${imageUrl}-${i}`} className="flex items-center gap-2">
+                    <ImageUpload
+                      imageUrl={imageUrl}
+                      uploading={uploadingKey === `payItForwardExtra-${i}`}
+                      onUpload={(file) =>
+                        handleUpload(`payItForwardExtra-${i}`, file, (prev, url) => {
+                          const photoUrls = [...(prev.support.payItForward.photoUrls || [])];
+                          photoUrls[i] = url;
+                          return {
+                            ...prev,
+                            support: {
+                              ...prev.support,
+                              payItForward: { ...prev.support.payItForward, photoUrls },
+                            },
+                          };
+                        })
+                      }
+                      onClear={() => {
+                        const photoUrls = (content.support.payItForward.photoUrls || []).filter((_, idx) => idx !== i);
+                        setContent({
+                          ...content,
+                          support: {
+                            ...content.support,
+                            payItForward: { ...content.support.payItForward, photoUrls },
+                          },
+                        });
+                      }}
+                      clearLabel="Remove photo"
+                    />
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                className={`mt-3 ${addButtonClass}`}
+                onClick={() =>
+                  setContent({
+                    ...content,
+                    support: {
+                      ...content.support,
+                      payItForward: {
+                        ...content.support.payItForward,
+                        photoUrls: [...(content.support.payItForward.photoUrls || []), ""],
+                      },
+                    },
+                  })
+                }
+              >
+                + Add photo
+              </button>
+            </div>
             <ParagraphList
               values={content.support.payItForward?.paragraphs || []}
               onChange={(paragraphs) =>

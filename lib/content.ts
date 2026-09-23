@@ -175,6 +175,8 @@ export type SiteContent = {
       heading: string;
       paragraphs: string[];
       photoUrl: string;
+      photoUrls: string[];
+      videoUrl: string;
       cta: Cta;
     };
   };
@@ -532,6 +534,8 @@ export const DEFAULT_CONTENT: SiteContent = {
         "Pay it Forward is a way to give a student, a family or a community the chance to learn, experience and carry Indian classical music onward. Your gift can support workshops, Shibirs, education, artist development and the wider Sadhana Arts programme.",
       ],
       photoUrl: "",
+      photoUrls: [],
+      videoUrl: "",
       cta: { label: "Donate", href: "/contact?type=Donate" },
     },
   },
@@ -584,4 +588,16 @@ export function contactEmails(contact: SiteContent["contact"]): string[] {
 
 export function displayWebsite(url: string): string {
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+}
+
+export function payItForwardPhotos(payItForward: SiteContent["support"]["payItForward"]): string[] {
+  const listed = [payItForward?.photoUrl, ...(payItForward?.photoUrls || [])]
+    .map((value) => (value || "").trim())
+    .filter(Boolean);
+  const seen = new Set<string>();
+  return listed.filter((src) => {
+    if (seen.has(src)) return false;
+    seen.add(src);
+    return true;
+  });
 }

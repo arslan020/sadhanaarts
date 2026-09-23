@@ -12,7 +12,7 @@ function sign(value: string): string {
 }
 
 export function checkCredentials(email: string, password: string): boolean {
-  const expectedEmail = process.env.ADMIN_EMAIL || "info@sadhanaarts.com";
+  const expectedEmail = process.env.ADMIN_EMAIL || "info@sadhana-arts.org";
   const expectedPassword = process.env.ADMIN_PASSWORD || "sadhana123";
   return email.trim().toLowerCase() === expectedEmail.toLowerCase() && password === expectedPassword;
 }

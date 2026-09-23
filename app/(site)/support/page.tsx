@@ -5,6 +5,9 @@ import Ornament from "@/components/Ornament";
 import PageHero from "@/components/PageHero";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import Reveal from "@/components/Reveal";
+import VideoEmbed from "@/components/VideoEmbed";
+import VideoPlaceholder from "@/components/VideoPlaceholder";
+import { payItForwardPhotos } from "@/lib/content";
 import { getContent } from "@/lib/store";
 
 export const revalidate = 0;
@@ -12,6 +15,9 @@ export const metadata: Metadata = { title: "Support Us" };
 
 export default async function SupportPage() {
   const { support } = await getContent();
+  const payItForward = support.payItForward;
+  const photos = payItForwardPhotos(payItForward);
+  const videoUrl = payItForward?.videoUrl?.trim() || "";
 
   return (
     <main>
@@ -43,50 +49,62 @@ export default async function SupportPage() {
         </div>
       </section>
       <section className="bg-warm-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-2">
-          <div>
-            {support.payItForward?.photoUrl ? (
-              <ContentImage
-                src={support.payItForward.photoUrl}
-                alt=""
-                className="w-full rounded-2xl object-cover shadow-sm ring-1 ring-gold/30"
-              />
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <Reveal>
+            {videoUrl ? (
+              <VideoEmbed url={videoUrl} title={payItForward?.heading || "Pay it Forward"} className="mx-auto max-w-4xl" />
             ) : (
-              <PhotoPlaceholder label="Pay it Forward photograph coming soon" />
+              <VideoPlaceholder label="Pay it Forward video coming soon" className="mx-auto max-w-4xl" />
             )}
-          </div>
-          <div>
+          </Reveal>
+
+          <div className="mx-auto mt-12 max-w-3xl">
             <Reveal>
               <h2 className="font-serif text-3xl font-semibold text-deep-burgundy sm:text-4xl">
-                {support.payItForward?.heading || "Pay it Forward"}
+                {payItForward?.heading || "Pay it Forward"}
               </h2>
               <div className="mt-5">
                 <Ornament />
               </div>
             </Reveal>
             <div className="mt-8 space-y-4">
-              {(support.payItForward?.paragraphs || []).map((para, i) => (
+              {(payItForward?.paragraphs || []).map((para, i) => (
                 <Reveal key={i}>
                   <p className="text-base leading-relaxed text-ink/80 sm:text-lg">{para}</p>
                 </Reveal>
               ))}
             </div>
-            {support.payItForward?.cta?.label && (
+            {payItForward?.cta?.label && (
               <Reveal className="mt-8">
                 <CtaRow
                   ctas={[
                     {
-                      ...support.payItForward.cta,
-                      href:
-                        support.payItForward.cta.href === "/contact"
-                          ? "/contact?type=Donate"
-                          : support.payItForward.cta.href,
+                      ...payItForward.cta,
+                      href: payItForward.cta.href === "/contact" ? "/contact?type=Donate" : payItForward.cta.href,
                     },
                   ]}
                 />
               </Reveal>
             )}
           </div>
+
+          {photos.length > 0 ? (
+            <div className={`mx-auto mt-12 grid max-w-4xl gap-4 ${photos.length === 1 ? "" : "sm:grid-cols-2"}`}>
+              {photos.map((src) => (
+                <ContentImage
+                  key={src}
+                  src={src}
+                  alt=""
+                  className="aspect-[16/10] w-full rounded-2xl object-cover shadow-sm ring-1 ring-gold/30"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2">
+              <PhotoPlaceholder label="Pay it Forward photograph" />
+              <PhotoPlaceholder label="Additional photograph" />
+            </div>
+          )}
         </div>
       </section>
       <section className="bg-deep-burgundy">
