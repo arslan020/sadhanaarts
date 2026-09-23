@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
-import { contactEmails, displayWebsite, enquiryCategories } from "@/lib/content";
+import { contactEmails, enquiryCategories } from "@/lib/content";
 import { getContent } from "@/lib/store";
 
 export const revalidate = 0;
@@ -13,7 +13,7 @@ export default async function ContactPage({
 }: {
   searchParams: Promise<{ type?: string }>;
 }) {
-  const { contact, site } = await getContent();
+  const { contact } = await getContent();
   const emails = contactEmails(contact);
   const formFallbackEmail =
     process.env.CONTACT_TO_EMAIL?.split(",")
@@ -23,7 +23,6 @@ export default async function ContactPage({
     contact.email ||
     "info@sadhana-arts.org";
   const categories = enquiryCategories(contact);
-  const website = site.website || "https://sadhana-arts.org";
   const requestedType = (await searchParams).type?.trim();
   const defaultCategory = categories.find((category) => category.toLowerCase() === requestedType?.toLowerCase()) || categories[0] || "";
 
@@ -53,14 +52,6 @@ export default async function ContactPage({
                 </a>
               ))}
             </div>
-            <a
-              href={website}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-block text-sm font-medium text-ink/70 hover:text-burgundy"
-            >
-              {displayWebsite(website)}
-            </a>
             <div className="mt-8">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Enquiry categories</p>
               <ul className="mt-4 flex flex-wrap gap-2">

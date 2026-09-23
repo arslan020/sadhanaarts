@@ -77,13 +77,6 @@ export default function Footer({ site, contact }: FooterProps) {
                   ))}
                 </span>
               </p>
-              {site.website && (
-                <p>
-                  <a href={site.website} target="_blank" rel="noreferrer" className="hover:text-gold">
-                    {displayWebsite(site.website)}
-                  </a>
-                </p>
-              )}
             </div>
           </Reveal>
         </div>
@@ -92,6 +85,16 @@ export default function Footer({ site, contact }: FooterProps) {
           <p className="text-xs text-ivory/50">
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
+          {site.website && (
+            <a
+              href={site.website}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-block text-xs text-ivory/50 transition hover:text-gold"
+            >
+              {displayWebsite(site.website)}
+            </a>
+          )}
         </div>
       </div>
     </footer>
