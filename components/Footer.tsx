@@ -32,7 +32,17 @@ export default function Footer({ site, contact }: FooterProps) {
         <div className="flex flex-col gap-10 sm:flex-row sm:flex-wrap sm:justify-center lg:flex-nowrap lg:items-start lg:justify-center lg:gap-x-20 xl:gap-x-24">
           <Reveal className="max-w-[15rem] sm:w-[15rem]">
             <Logo inverted />
-            <p className="mt-5 font-serif text-base leading-snug text-soft-gold">{site.brandStatement}</p>
+            <p className="mt-5 font-serif text-base leading-snug text-soft-gold">
+              {site.brandStatement
+                .split(/(?<=\.)\s+/)
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+            </p>
           </Reveal>
 
           <FooterList heading="Discover" links={DISCOVER_LINKS} />
