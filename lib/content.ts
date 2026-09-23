@@ -575,6 +575,7 @@ export function contactEmails(contact: SiteContent["contact"]): string[] {
   const merged = ["info@sadhana-arts.org", ...listed, ...fallback];
   const seen = new Set<string>();
   return merged.filter((address) => {
+    if (address.endsWith("@sadhanaarts.com")) return false;
     if (seen.has(address)) return false;
     seen.add(address);
     return true;
