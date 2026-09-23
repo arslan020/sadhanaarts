@@ -542,7 +542,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     organisation: "Sadhana Arts CIC",
     addressLines: ["78 High Street", "Newport Pagnell", "Milton Keynes", "MK16 8AQ", "United Kingdom"],
     email: "info@sadhana-arts.org",
-    emails: ["info@sadhana-arts.org", "Amritpal.Sidhu@Sadhana-Arts.org", "Jaswinder.Hanspal@Sadhana-Arts.org"],
+    emails: ["info@sadhana-arts.org", "amritpal.sidhu@sadhana-arts.org", "jaswinder.hanspal@sadhana-arts.org"],
     enquiryCategories: [
       "General Enquiries",
       "Donate",
@@ -570,14 +570,13 @@ export function enquiryCategories(contact: SiteContent["contact"]): string[] {
 }
 
 export function contactEmails(contact: SiteContent["contact"]): string[] {
-  const listed = (contact.emails || []).map((value) => value.trim()).filter(Boolean);
-  const fallback = contact.email?.trim() ? [contact.email.trim()] : [];
+  const listed = (contact.emails || []).map((value) => value.trim().toLowerCase()).filter(Boolean);
+  const fallback = contact.email?.trim() ? [contact.email.trim().toLowerCase()] : [];
   const merged = ["info@sadhana-arts.org", ...listed, ...fallback];
   const seen = new Set<string>();
   return merged.filter((address) => {
-    const key = address.toLowerCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
+    if (seen.has(address)) return false;
+    seen.add(address);
     return true;
   });
 }
