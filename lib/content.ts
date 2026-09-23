@@ -541,8 +541,8 @@ export const DEFAULT_CONTENT: SiteContent = {
       "Whether you would like to attend an event, participate in a Shibir, work with us, support our programmes or simply learn more about Sadhana Arts, we would be delighted to hear from you.",
     organisation: "Sadhana Arts CIC",
     addressLines: ["78 High Street", "Newport Pagnell", "Milton Keynes", "MK16 8AQ", "United Kingdom"],
-    email: "Amritpal.Sidhu@Sadhana-Arts.org",
-    emails: ["Amritpal.Sidhu@Sadhana-Arts.org", "Jaswinder.Hanspal@Sadhana-Arts.org"],
+    email: "info@sadhana-arts.org",
+    emails: ["info@sadhana-arts.org", "Amritpal.Sidhu@Sadhana-Arts.org", "Jaswinder.Hanspal@Sadhana-Arts.org"],
     enquiryCategories: [
       "General Enquiries",
       "Donate",
@@ -571,9 +571,15 @@ export function enquiryCategories(contact: SiteContent["contact"]): string[] {
 
 export function contactEmails(contact: SiteContent["contact"]): string[] {
   const listed = (contact.emails || []).map((value) => value.trim()).filter(Boolean);
-  if (listed.length) return [...new Set(listed)];
-  if (contact.email?.trim()) return [contact.email.trim()];
-  return ["Amritpal.Sidhu@Sadhana-Arts.org", "Jaswinder.Hanspal@Sadhana-Arts.org"];
+  const fallback = contact.email?.trim() ? [contact.email.trim()] : [];
+  const merged = ["info@sadhana-arts.org", ...listed, ...fallback];
+  const seen = new Set<string>();
+  return merged.filter((address) => {
+    const key = address.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 export function displayWebsite(url: string): string {

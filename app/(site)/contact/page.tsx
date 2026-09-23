@@ -15,6 +15,13 @@ export default async function ContactPage({
 }) {
   const { contact, site } = await getContent();
   const emails = contactEmails(contact);
+  const formFallbackEmail =
+    process.env.CONTACT_TO_EMAIL?.split(",")
+      .map((value) => value.trim())
+      .find(Boolean) ||
+    emails[0] ||
+    contact.email ||
+    "info@sadhana-arts.org";
   const categories = enquiryCategories(contact);
   const website = site.website || "https://sadhana-arts.org";
   const requestedType = (await searchParams).type?.trim();
@@ -70,7 +77,7 @@ export default async function ContactPage({
           </Reveal>
           <Reveal delayMs={120}>
             <ContactForm
-              email={emails[0] || contact.email}
+              email={formFallbackEmail}
               categories={categories}
               defaultCategory={defaultCategory}
             />

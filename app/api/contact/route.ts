@@ -7,6 +7,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 4000;
+const DEFAULT_FROM = "Sadhana Arts <info@sadhana-arts.org>";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
   const resendKey = process.env.RESEND_API_KEY?.trim();
   if (resendKey) {
     const resend = new Resend(resendKey);
-    const from = process.env.CONTACT_FROM_EMAIL?.trim() || "Sadhana Arts <beth.t@example.com>";
+    const from = process.env.CONTACT_FROM_EMAIL?.trim() || DEFAULT_FROM;
     const { error } = await resend.emails.send({
       from,
       to,
@@ -72,10 +73,9 @@ export async function POST(request: Request) {
       subject,
       text,
     });
-    if (error) {
-      return NextResponse.json({ error: error.message || "Failed to send message." }, { status: 500 });
+    if (!error) {
+      return NextResponse.json({ ok: true });
     }
-    return NextResponse.json({ ok: true });
   }
 
   const results = await Promise.all(
