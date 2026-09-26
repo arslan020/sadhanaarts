@@ -13,7 +13,7 @@ import {
   inputClass,
   labelClass,
 } from "@/components/admin/fields";
-import { DEFAULT_CONTENT, type Artist, type SiteContent, type TeamMember } from "@/lib/content";
+import { DEFAULT_CONTENT, type Artist, type ArtistCategory, type SiteContent, type TeamMember } from "@/lib/content";
 
 const TABS = [
   { id: "site", label: "Site" },
@@ -859,10 +859,6 @@ export default function AdminDashboardPage() {
                   setContent({ ...content, artists: { ...content.artists, paragraphs: content.artists.paragraphs.filter((_, idx) => idx !== i) } })
                 }
               />
-              <Field value={content.artists.mastersHeading} label="Masters heading" onChange={(mastersHeading) => setContent({ ...content, artists: { ...content.artists, mastersHeading } })} />
-              <Area value={content.artists.mastersIntro} label="Masters introduction" onChange={(mastersIntro) => setContent({ ...content, artists: { ...content.artists, mastersIntro } })} />
-              <Field value={content.artists.emergingHeading} label="Emerging heading" onChange={(emergingHeading) => setContent({ ...content, artists: { ...content.artists, emergingHeading } })} />
-              <Area value={content.artists.emergingIntro} label="Emerging introduction" onChange={(emergingIntro) => setContent({ ...content, artists: { ...content.artists, emergingIntro } })} />
               <Field value={content.artists.passingHeading} label="Passing it forward heading" onChange={(passingHeading) => setContent({ ...content, artists: { ...content.artists, passingHeading } })} />
               <ParagraphList
                 values={content.artists.passingParagraphs}
@@ -878,11 +874,70 @@ export default function AdminDashboardPage() {
                 }
               />
             </Section>
-            <Section title="Artist cards" description="Add or edit maestros and emerging artists.">
+            <Section title="Artist categories" description="Rename headings such as Emerging Artists, or add more groups for the Artists page.">
+              {adminArtistCategories(content.artists).map((category, i) => (
+                <div key={category.id || i} className="rounded-xl border border-parchment p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="grid w-full gap-3">
+                      <Field
+                        value={category.heading}
+                        label="Category heading"
+                        onChange={(heading) => {
+                          const categories = [...adminArtistCategories(content.artists)];
+                          categories[i] = { ...categories[i], heading };
+                          setContent({ ...content, artists: { ...content.artists, categories } });
+                        }}
+                      />
+                      <Area
+                        value={category.intro}
+                        label="Introduction"
+                        onChange={(intro) => {
+                          const categories = [...adminArtistCategories(content.artists)];
+                          categories[i] = { ...categories[i], intro };
+                          setContent({ ...content, artists: { ...content.artists, categories } });
+                        }}
+                      />
+                    </div>
+                    <RemoveButton
+                      label="Remove category"
+                      onClick={() =>
+                        setContent({
+                          ...content,
+                          artists: {
+                            ...content.artists,
+                            categories: adminArtistCategories(content.artists).filter((_, idx) => idx !== i),
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                className={addButtonClass}
+                onClick={() =>
+                  setContent({
+                    ...content,
+                    artists: {
+                      ...content.artists,
+                      categories: [
+                        ...adminArtistCategories(content.artists),
+                        { id: `category-${Date.now()}`, heading: "New category", intro: "" },
+                      ],
+                    },
+                  })
+                }
+              >
+                + Add category
+              </button>
+            </Section>
+            <Section title="Artist cards" description="Add or edit artists and assign each one to a category.">
               {content.artists.people.map((person, i) => (
                 <ArtistEditor
                   key={i}
                   person={person}
+                  categories={adminArtistCategories(content.artists)}
                   uploading={uploadingKey === `artist-${i}`}
                   onChange={(next) => {
                     const people = [...content.artists.people];
@@ -914,7 +969,7 @@ export default function AdminDashboardPage() {
                       ...content.artists,
                       people: [
                         ...content.artists.people,
-                        { name: "", role: "", category: "emerging", bio: "", photoUrl: "" },
+                        { name: "", role: "", category: adminArtistCategories(content.artists)[0]?.id || "emerging", bio: "", photoUrl: "" },
                       ],
                     },
                   })
@@ -1601,14 +1656,24 @@ function TeamEditor({
   );
 }
 
+function adminArtistCategories(artists: SiteContent["artists"]): ArtistCategory[] {
+  if (artists.categories?.length) return artists.categories;
+  return [
+    { id: "master", heading: artists.mastersHeading, intro: artists.mastersIntro },
+    { id: "emerging", heading: artists.emergingHeading, intro: artists.emergingIntro },
+  ];
+}
+
 function ArtistEditor({
   person,
+  categories,
   uploading,
   onChange,
   onUpload,
   onRemove,
 }: {
   person: Artist;
+  categories: ArtistCategory[];
   uploading: boolean;
   onChange: (person: Artist) => void;
   onUpload: (file: File) => void;
@@ -1631,10 +1696,13 @@ function ArtistEditor({
             <select
               className={`mt-1 ${inputClass}`}
               value={person.category}
-              onChange={(e) => onChange({ ...person, category: e.target.value as Artist["category"] })}
+              onChange={(e) => onChange({ ...person, category: e.target.value })}
             >
-              <option value="master">Master / Maestro</option>
-              <option value="emerging">Emerging artist</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.heading}
+                </option>
+              ))}
             </select>
           </div>
         </div>

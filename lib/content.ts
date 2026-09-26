@@ -44,9 +44,15 @@ export type WorkArea = {
 export type Artist = {
   name: string;
   role: string;
-  category: "master" | "emerging";
+  category: string;
   bio: string;
   photoUrl: string;
+};
+
+export type ArtistCategory = {
+  id: string;
+  heading: string;
+  intro: string;
 };
 
 export type TeamMember = {
@@ -152,6 +158,7 @@ export type SiteContent = {
     mastersIntro: string;
     emergingHeading: string;
     emergingIntro: string;
+    categories: ArtistCategory[];
     passingHeading: string;
     passingParagraphs: string[];
     people: Artist[];
@@ -410,6 +417,20 @@ export const DEFAULT_CONTENT: SiteContent = {
     emergingHeading: "Emerging Artists",
     emergingIntro:
       "The next generation of musicians developing their artistry, building performance experience and carrying their respective traditions forward.",
+    categories: [
+      {
+        id: "master",
+        heading: "Masters & Maestros",
+        intro:
+          "Artists who have dedicated decades to their craft and who represent some of the highest standards within Indian classical music.",
+      },
+      {
+        id: "emerging",
+        heading: "Emerging Artists",
+        intro:
+          "The next generation of musicians developing their artistry, building performance experience and carrying their respective traditions forward.",
+      },
+    ],
     passingHeading: "Passing It Forward",
     passingParagraphs: [
       "The connection between these generations is fundamental to Sadhana Arts.",
@@ -600,4 +621,27 @@ export function payItForwardPhotos(payItForward: SiteContent["support"]["payItFo
     seen.add(src);
     return true;
   });
+}
+
+export function artistCategories(artists: SiteContent["artists"]): ArtistCategory[] {
+  if (artists.categories?.length) {
+    return artists.categories.map((category) => ({
+      id: category.id?.trim() || slugify(category.heading),
+      heading: category.heading?.trim() || "Artists",
+      intro: category.intro || "",
+    }));
+  }
+  return [
+    { id: "master", heading: artists.mastersHeading || "Masters & Maestros", intro: artists.mastersIntro || "" },
+    { id: "emerging", heading: artists.emergingHeading || "Emerging Artists", intro: artists.emergingIntro || "" },
+  ];
+}
+
+function slugify(value: string): string {
+  return (
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || `category-${Date.now()}`
+  );
 }

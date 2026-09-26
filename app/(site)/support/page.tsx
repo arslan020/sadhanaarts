@@ -50,15 +50,7 @@ export default async function SupportPage() {
       </section>
       <section className="bg-warm-white">
         <div className="mx-auto max-w-6xl px-6 py-20">
-          <Reveal>
-            {videoUrl ? (
-              <VideoEmbed url={videoUrl} title={payItForward?.heading || "Pay it Forward"} className="mx-auto max-w-4xl" />
-            ) : (
-              <VideoPlaceholder label="Pay it Forward video coming soon" className="mx-auto max-w-4xl" />
-            )}
-          </Reveal>
-
-          <div className="mx-auto mt-12 max-w-3xl">
+          <div className="mx-auto max-w-3xl">
             <Reveal>
               <h2 className="font-serif text-3xl font-semibold text-deep-burgundy sm:text-4xl">
                 {payItForward?.heading || "Pay it Forward"}
@@ -67,25 +59,29 @@ export default async function SupportPage() {
                 <Ornament />
               </div>
             </Reveal>
-            <div className="mt-8 space-y-4">
-              {(payItForward?.paragraphs || []).map((para, i) => (
+            {(payItForward?.paragraphs || [])[0] && (
+              <Reveal className="mt-8">
+                <p className="text-base leading-relaxed text-ink/80 sm:text-lg">{(payItForward?.paragraphs || [])[0]}</p>
+              </Reveal>
+            )}
+          </div>
+
+          <Reveal className="mt-10">
+            {videoUrl ? (
+              <VideoEmbed url={videoUrl} title={payItForward?.heading || "Pay it Forward"} className="mx-auto max-w-4xl" />
+            ) : (
+              <VideoPlaceholder label="Pay it Forward video coming soon" className="mx-auto max-w-4xl" />
+            )}
+          </Reveal>
+
+          <div className="mx-auto mt-10 max-w-3xl">
+            <div className="space-y-4">
+              {(payItForward?.paragraphs || []).slice(1).map((para, i) => (
                 <Reveal key={i}>
                   <p className="text-base leading-relaxed text-ink/80 sm:text-lg">{para}</p>
                 </Reveal>
               ))}
             </div>
-            {payItForward?.cta?.label && (
-              <Reveal className="mt-8">
-                <CtaRow
-                  ctas={[
-                    {
-                      ...payItForward.cta,
-                      href: payItForward.cta.href === "/contact" ? "/contact?type=Donate" : payItForward.cta.href,
-                    },
-                  ]}
-                />
-              </Reveal>
-            )}
           </div>
 
           {photos.length > 0 ? (
@@ -104,6 +100,20 @@ export default async function SupportPage() {
               <PhotoPlaceholder label="Pay it Forward photograph" />
               <PhotoPlaceholder label="Additional photograph" />
             </div>
+          )}
+
+          {payItForward?.cta?.label && (
+            <Reveal className="mt-12">
+              <CtaRow
+                size="lg"
+                ctas={[
+                  {
+                    ...payItForward.cta,
+                    href: payItForward.cta.href === "/contact" ? "/contact?type=Donate" : payItForward.cta.href,
+                  },
+                ]}
+              />
+            </Reveal>
           )}
         </div>
       </section>

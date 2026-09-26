@@ -4,6 +4,7 @@ import CtaRow from "@/components/CtaRow";
 import Ornament from "@/components/Ornament";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import { artistCategories } from "@/lib/content";
 import { getContent } from "@/lib/store";
 
 export const revalidate = 0;
@@ -11,8 +12,7 @@ export const metadata: Metadata = { title: "Artists" };
 
 export default async function ArtistsPage() {
   const { artists } = await getContent();
-  const masters = artists.people.filter((person) => person.category === "master");
-  const emerging = artists.people.filter((person) => person.category === "emerging");
+  const groups = artistCategories(artists);
 
   return (
     <main>
@@ -27,8 +27,19 @@ export default async function ArtistsPage() {
         </div>
       </section>
 
-      <ArtistGroup heading={artists.mastersHeading} intro={artists.mastersIntro} people={masters} />
-      <ArtistGroup heading={artists.emergingHeading} intro={artists.emergingIntro} people={emerging} tone="ivory" />
+      {groups.map((group, i) => {
+        const people = artists.people.filter((person) => person.category === group.id);
+        if (!people.length) return null;
+        return (
+          <ArtistGroup
+            key={group.id}
+            heading={group.heading}
+            intro={group.intro}
+            people={people}
+            tone={i % 2 === 0 ? "warm" : "ivory"}
+          />
+        );
+      })}
 
       <section className="bg-warm-white">
         <div className="mx-auto max-w-3xl px-6 py-20 text-center">

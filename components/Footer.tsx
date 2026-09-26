@@ -77,6 +77,7 @@ export default function Footer({ site, contact }: FooterProps) {
               {displayWebsite(site.website)}
             </a>
           )}
+          <p className="mt-4 text-xs text-ivory/45">Powered by Hashtag Media Marketing</p>
         </div>
       </div>
     </footer>

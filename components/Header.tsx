@@ -28,13 +28,13 @@ export default function Header({ siteName }: HeaderProps) {
             <Logo />
           </Link>
 
-          <nav className="hidden items-center gap-1 xl:flex">
-            {NAV_LINKS.map((link) =>
+          <nav className="hidden items-center gap-0.5 xl:flex">
+            {NAV_LINKS.filter((link) => link.href !== "/").map((link) =>
               link.children ? (
                 <div key={link.href} className="group relative">
                   <Link
                     href={link.href}
-                    className={`inline-flex items-center gap-1 px-3 py-2 text-sm font-medium transition ${
+                    className={`inline-flex items-center gap-1 px-2.5 py-2 text-sm font-medium transition ${
                       isActive(link.href) ? "text-burgundy" : "text-ink/80 hover:text-burgundy"
                     }`}
                   >
@@ -63,7 +63,7 @@ export default function Header({ siteName }: HeaderProps) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`group whitespace-nowrap px-3 py-2 text-sm font-medium transition ${
+                  className={`group whitespace-nowrap px-2.5 py-2 text-sm font-medium transition ${
                     isActive(link.href) ? "text-burgundy" : "text-ink/80 hover:text-burgundy"
                   }`}
                 >
@@ -78,12 +78,20 @@ export default function Header({ siteName }: HeaderProps) {
             )}
           </nav>
 
-          <Link
-            href="/support"
-            className="hidden rounded-full bg-burgundy px-5 py-2 text-sm font-semibold text-ivory transition hover:bg-deep-burgundy lg:inline-flex"
-          >
-            Support Us
-          </Link>
+          <div className="hidden items-center gap-2 lg:flex">
+            <Link
+              href="/support"
+              className="rounded-full border border-burgundy/30 bg-warm-white px-4 py-2 text-sm font-semibold text-burgundy transition hover:border-burgundy hover:bg-parchment"
+            >
+              Support Us
+            </Link>
+            <Link
+              href="/contact?type=Donate"
+              className="rounded-full bg-burgundy px-4 py-2 text-sm font-semibold text-ivory transition hover:bg-deep-burgundy"
+            >
+              Donate
+            </Link>
+          </div>
 
           <button
             type="button"
@@ -164,6 +172,22 @@ export default function Header({ siteName }: HeaderProps) {
               </Link>
             )
           )}
+          <div className="mt-4 flex flex-col gap-2 px-2 pb-6">
+            <Link
+              href="/support"
+              onClick={() => setOpen(false)}
+              className="rounded-full border border-burgundy/30 px-4 py-2.5 text-center text-sm font-semibold text-burgundy"
+            >
+              Support Us
+            </Link>
+            <Link
+              href="/contact?type=Donate"
+              onClick={() => setOpen(false)}
+              className="rounded-full bg-burgundy px-4 py-2.5 text-center text-sm font-semibold text-ivory"
+            >
+              Donate
+            </Link>
+          </div>
         </div>
       </nav>
     </>
