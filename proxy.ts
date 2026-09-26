@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
 
+// Next.js 16: keep HTTPS + admin checks in proxy.ts only (middleware.ts is not allowed).
+
 export function proxy(request: NextRequest) {
   const proto = request.headers.get("x-forwarded-proto");
   if (process.env.NODE_ENV === "production" && proto === "http") {
