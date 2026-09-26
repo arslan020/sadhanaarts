@@ -4,6 +4,15 @@ export type NavLink = {
   children?: { label: string; href: string }[];
 };
 
+export const DONATE_URL = "https://buy.stripe.com/3cI00i6kD7Kma2mbC46Zy05";
+export const DONATE_THANKS_URL = "https://sadhana-arts.org/donate/thank-you";
+
+export function donateHref(href?: string): string {
+  const value = (href || "").trim();
+  if (!value || value === "/contact" || value.startsWith("/contact?type=Donate")) return DONATE_URL;
+  return value;
+}
+
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
@@ -185,6 +194,10 @@ export type SiteContent = {
       photoUrls: string[];
       videoUrl: string;
       cta: Cta;
+    };
+    donateThanks: {
+      heading: string;
+      message: string;
     };
   };
   contact: {
@@ -557,7 +570,12 @@ export const DEFAULT_CONTENT: SiteContent = {
       photoUrl: "",
       photoUrls: [],
       videoUrl: "",
-      cta: { label: "Donate", href: "/contact?type=Donate" },
+      cta: { label: "Donate", href: DONATE_URL },
+    },
+    donateThanks: {
+      heading: "Thank you",
+      message:
+        "Your gift has been received. You are helping Sadhana Arts carry Indian classical music forward — for students, artists and the generations still to come.",
     },
   },
   contact: {

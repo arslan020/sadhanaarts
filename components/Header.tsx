@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
-import { NAV_LINKS } from "@/lib/content";
+import { DONATE_URL, NAV_LINKS } from "@/lib/content";
 
 type HeaderProps = {
   siteName: string;
@@ -85,12 +85,14 @@ export default function Header({ siteName }: HeaderProps) {
             >
               Support Us
             </Link>
-            <Link
-              href="/contact?type=Donate"
+            <a
+              href={DONATE_URL}
+              target="_blank"
+              rel="noreferrer"
               className="rounded-full bg-burgundy px-4 py-2 text-sm font-semibold text-ivory transition hover:bg-deep-burgundy"
             >
               Donate
-            </Link>
+            </a>
           </div>
 
           <button
@@ -180,13 +182,15 @@ export default function Header({ siteName }: HeaderProps) {
             >
               Support Us
             </Link>
-            <Link
-              href="/contact?type=Donate"
+            <a
+              href={DONATE_URL}
+              target="_blank"
+              rel="noreferrer"
               onClick={() => setOpen(false)}
               className="rounded-full bg-burgundy px-4 py-2.5 text-center text-sm font-semibold text-ivory"
             >
               Donate
-            </Link>
+            </a>
           </div>
         </div>
       </nav>

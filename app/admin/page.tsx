@@ -1372,7 +1372,7 @@ export default function AdminDashboardPage() {
               />
               <Field
                 value={content.support.payItForward?.cta.href || ""}
-                label="Button link (donate URL or /contact)"
+                label="Button link (Stripe donate URL). After payment, set Stripe redirect to https://sadhana-arts.org/donate/thank-you"
                 onChange={(href) =>
                   setContent({
                     ...content,
@@ -1387,6 +1387,37 @@ export default function AdminDashboardPage() {
                 }
               />
             </div>
+          </Section>
+          <Section
+            title="Donate thank you page"
+            description="Shown after a successful Stripe payment at /donate/thank-you. You can add or change the message any time."
+          >
+            <Field
+              value={content.support.donateThanks?.heading || ""}
+              label="Heading"
+              onChange={(heading) =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    donateThanks: { ...content.support.donateThanks, heading },
+                  },
+                })
+              }
+            />
+            <Area
+              value={content.support.donateThanks?.message || ""}
+              label="Thank you message"
+              onChange={(message) =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    donateThanks: { ...content.support.donateThanks, message },
+                  },
+                })
+              }
+            />
           </Section>
           </>
         )}
