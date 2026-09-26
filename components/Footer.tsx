@@ -77,7 +77,17 @@ export default function Footer({ site, contact }: FooterProps) {
               {displayWebsite(site.website)}
             </a>
           )}
-          <p className="mt-4 text-xs text-ivory/45">Powered by Hashtag Media Marketing</p>
+          <p className="mt-4 text-xs text-ivory/45">
+            Powered by{" "}
+            <a
+              href="http://www.hashtagmediamarketing.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-ivory/30 underline-offset-2 transition hover:text-gold hover:decoration-gold"
+            >
+              Hashtag Media Marketing
+            </a>
+          </p>
         </div>
       </div>
     </footer>

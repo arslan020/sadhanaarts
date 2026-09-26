@@ -36,7 +36,6 @@ export const NAV_LINKS: NavLink[] = [
   },
   { label: "Artists", href: "/artists" },
   { label: "What’s New", href: "/news" },
-  { label: "Support Us", href: "/support" },
   { label: "Contact", href: "/contact" },
 ];
 
