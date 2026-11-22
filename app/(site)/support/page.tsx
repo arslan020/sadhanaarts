@@ -109,7 +109,7 @@ export default async function SupportPage() {
                 ctas={[
                   {
                     ...payItForward.cta,
-                    href: donateHref(payItForward.cta.href),
+                    href: donateHref(support.donateUrl || payItForward.cta.href),
                   },
                 ]}
               />

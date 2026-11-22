@@ -1161,6 +1161,28 @@ export default function AdminDashboardPage() {
 
         {tab === "support" && (
           <>
+          <Section
+            title="Donate button"
+            description="Used on the header Donate button and the Support page. Paste a Stripe link or any page URL. You can change this any time."
+          >
+            <Field
+              value={content.support.donateUrl || content.support.payItForward?.cta.href || ""}
+              label="Donate button link"
+              onChange={(donateUrl) =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    donateUrl,
+                    payItForward: {
+                      ...content.support.payItForward,
+                      cta: { ...content.support.payItForward.cta, href: donateUrl },
+                    },
+                  },
+                })
+              }
+            />
+          </Section>
           <Section title="Support Us">
             <Field value={content.support.heading} label="Heading" onChange={(heading) => setContent({ ...content, support: { ...content.support, heading } })} />
             <Area value={content.support.lead} label="Lead" onChange={(lead) => setContent({ ...content, support: { ...content.support, lead } })} />
@@ -1353,40 +1375,22 @@ export default function AdminDashboardPage() {
                 })
               }
             />
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field
-                value={content.support.payItForward?.cta.label || ""}
-                label="Button label"
-                onChange={(label) =>
-                  setContent({
-                    ...content,
-                    support: {
-                      ...content.support,
-                      payItForward: {
-                        ...content.support.payItForward,
-                        cta: { ...content.support.payItForward.cta, label },
-                      },
+            <Field
+              value={content.support.payItForward?.cta.label || ""}
+              label="Button label (uses the Donate button link at the top of this tab)"
+              onChange={(label) =>
+                setContent({
+                  ...content,
+                  support: {
+                    ...content.support,
+                    payItForward: {
+                      ...content.support.payItForward,
+                      cta: { ...content.support.payItForward.cta, label },
                     },
-                  })
-                }
-              />
-              <Field
-                value={content.support.payItForward?.cta.href || ""}
-                label="Button link (Stripe donate URL). After payment, set Stripe redirect to https://sadhana-arts.org/donate/thank-you"
-                onChange={(href) =>
-                  setContent({
-                    ...content,
-                    support: {
-                      ...content.support,
-                      payItForward: {
-                        ...content.support.payItForward,
-                        cta: { ...content.support.payItForward.cta, href },
-                      },
-                    },
-                  })
-                }
-              />
-            </div>
+                  },
+                })
+              }
+            />
           </Section>
           <Section
             title="Donate thank you page"

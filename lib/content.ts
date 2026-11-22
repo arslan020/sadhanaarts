@@ -186,6 +186,7 @@ export type SiteContent = {
     legacyHeading: string;
     legacyItems: string[];
     ctas: Cta[];
+    donateUrl: string;
     payItForward: {
       heading: string;
       paragraphs: string[];
@@ -560,6 +561,7 @@ export const DEFAULT_CONTENT: SiteContent = {
       { label: "Become a Partner", href: "/contact" },
       { label: "Talk to Us", href: "/contact" },
     ],
+    donateUrl: DONATE_URL,
     payItForward: {
       heading: "Pay it Forward",
       paragraphs: [
