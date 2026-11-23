@@ -4,7 +4,7 @@ export type NavLink = {
   children?: { label: string; href: string }[];
 };
 
-export const DONATE_URL = "https://buy.stripe.com/3cI00i6kD7Kma2mbC46Zy05";
+export const DONATE_URL = "https://support.sadhana-arts.org";
 export const DONATE_PATH = "/donate";
 export const DONATE_THANKS_URL = "https://sadhana-arts.org/donate/thank-you";
 
@@ -15,7 +15,8 @@ export function donateHref(href?: string): string {
     value === "/contact" ||
     value.startsWith("/contact?type=Donate") ||
     value === DONATE_PATH ||
-    /\/donate\/?$/i.test(value)
+    /\/donate\/?$/i.test(value) ||
+    value.includes("buy.stripe.com")
   ) {
     return DONATE_URL;
   }
