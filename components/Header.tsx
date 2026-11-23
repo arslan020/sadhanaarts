@@ -4,18 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
-import { donateHref, NAV_LINKS } from "@/lib/content";
+import { DONATE_PATH, NAV_LINKS } from "@/lib/content";
 
 type HeaderProps = {
   siteName: string;
-  donateUrl?: string;
 };
 
-function isExternal(href: string) {
-  return href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:");
-}
-
-export default function Header({ siteName, donateUrl }: HeaderProps) {
+export default function Header({ siteName }: HeaderProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -24,7 +19,6 @@ export default function Header({ siteName, donateUrl }: HeaderProps) {
     if (href === "/") return pathname === "/";
     return pathname === href || pathname.startsWith(`${href}/`);
   };
-  const donateLink = donateHref(donateUrl);
   const donateClass =
     "rounded-full bg-burgundy px-4 py-2 text-sm font-semibold text-ivory transition hover:bg-deep-burgundy";
   const donateMobileClass =
@@ -95,15 +89,9 @@ export default function Header({ siteName, donateUrl }: HeaderProps) {
             >
               Support Us
             </Link>
-            {isExternal(donateLink) ? (
-              <a href={donateLink} target="_blank" rel="noreferrer" className={donateClass}>
-                Donate
-              </a>
-            ) : (
-              <Link href={donateLink} className={donateClass}>
-                Donate
-              </Link>
-            )}
+            <Link href={DONATE_PATH} className={donateClass}>
+              Donate
+            </Link>
           </div>
 
           <button
@@ -193,21 +181,9 @@ export default function Header({ siteName, donateUrl }: HeaderProps) {
             >
               Support Us
             </Link>
-            {isExternal(donateLink) ? (
-              <a
-                href={donateLink}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setOpen(false)}
-                className={donateMobileClass}
-              >
-                Donate
-              </a>
-            ) : (
-              <Link href={donateLink} onClick={() => setOpen(false)} className={donateMobileClass}>
-                Donate
-              </Link>
-            )}
+            <Link href={DONATE_PATH} onClick={() => setOpen(false)} className={donateMobileClass}>
+              Donate
+            </Link>
           </div>
         </div>
       </nav>

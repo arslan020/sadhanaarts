@@ -1163,7 +1163,7 @@ export default function AdminDashboardPage() {
           <>
           <Section
             title="Donate button"
-            description="Used on the header Donate button and the Support page. Paste a Stripe link or any page URL. You can change this any time."
+            description="Paste the Stripe (or other payment) link here. Donors can be sent the clean URL https://sadhana-arts.org/donate — it always goes to this destination. Change this if you switch payment provider."
           >
             <Field
               value={content.support.donateUrl || content.support.payItForward?.cta.href || ""}

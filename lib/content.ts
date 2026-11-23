@@ -5,11 +5,20 @@ export type NavLink = {
 };
 
 export const DONATE_URL = "https://buy.stripe.com/3cI00i6kD7Kma2mbC46Zy05";
+export const DONATE_PATH = "/donate";
 export const DONATE_THANKS_URL = "https://sadhana-arts.org/donate/thank-you";
 
 export function donateHref(href?: string): string {
   const value = (href || "").trim();
-  if (!value || value === "/contact" || value.startsWith("/contact?type=Donate")) return DONATE_URL;
+  if (
+    !value ||
+    value === "/contact" ||
+    value.startsWith("/contact?type=Donate") ||
+    value === DONATE_PATH ||
+    /\/donate\/?$/i.test(value)
+  ) {
+    return DONATE_URL;
+  }
   return value;
 }
 

@@ -7,7 +7,7 @@ import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import Reveal from "@/components/Reveal";
 import VideoEmbed from "@/components/VideoEmbed";
 import VideoPlaceholder from "@/components/VideoPlaceholder";
-import { donateHref, payItForwardPhotos } from "@/lib/content";
+import { DONATE_PATH, payItForwardPhotos } from "@/lib/content";
 import { getContent } from "@/lib/store";
 
 export const revalidate = 0;
@@ -109,7 +109,7 @@ export default async function SupportPage() {
                 ctas={[
                   {
                     ...payItForward.cta,
-                    href: donateHref(support.donateUrl || payItForward.cta.href),
+                    href: DONATE_PATH,
                   },
                 ]}
               />

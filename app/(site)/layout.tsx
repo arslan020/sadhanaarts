@@ -12,7 +12,7 @@ export default async function SiteLayout({
 
   return (
     <>
-      <Header siteName={content.site.name} donateUrl={content.support.donateUrl} />
+      <Header siteName={content.site.name} />
       {children}
       <Footer site={content.site} contact={content.contact} />
     </>
